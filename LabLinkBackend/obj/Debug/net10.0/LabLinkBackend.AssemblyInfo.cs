@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LabLinkBackend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+880e7580ff005c76b99d13250f4a860322c32631")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+49dd44c973a896d895990b6edda5bfebcda92193")]
 [assembly: System.Reflection.AssemblyProductAttribute("LabLinkBackend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LabLinkBackend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

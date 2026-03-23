@@ -157,3 +157,11 @@ C:\LablinkBackend\LabLinkBackend\obj\Debug\net10.0\refint\LabLinkBackend.dll
 C:\LablinkBackend\LabLinkBackend\obj\Debug\net10.0\LabLinkBackend.pdb
 C:\LablinkBackend\LabLinkBackend\obj\Debug\net10.0\LabLinkBackend.genruntimeconfig.cache
 C:\LablinkBackend\LabLinkBackend\obj\Debug\net10.0\ref\LabLinkBackend.dll
+C:\LablinkBackend\LabLinkBackend\bin\Debug\net10.0\AutoMapper.dll
+C:\LablinkBackend\LabLinkBackend\bin\Debug\net10.0\gfoidl.Base64.dll
+C:\LablinkBackend\LabLinkBackend\bin\Debug\net10.0\JsonWebToken.dll
+C:\LablinkBackend\LabLinkBackend\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\LablinkBackend\LabLinkBackend\bin\Debug\net10.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\LablinkBackend\LabLinkBackend\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\LablinkBackend\LabLinkBackend\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\LablinkBackend\LabLinkBackend\bin\Debug\net10.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

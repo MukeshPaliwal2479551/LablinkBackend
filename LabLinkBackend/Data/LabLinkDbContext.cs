@@ -92,11 +92,12 @@ public partial class LabLinkDbContext : DbContext
     public virtual DbSet<Worklist> Worklists { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=LTIN719600\\SQLEXPRESS;Database=LabLinkDB;Trusted_Connection=True;TrustServerCertificate=True");
-
+    {
+        
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
         modelBuilder.Entity<Accession>(entity =>
         {
             entity.HasKey(e => e.AccessionId).HasName("PK__Accessio__B4B2533D91A55B9E");
@@ -830,6 +831,7 @@ public partial class LabLinkDbContext : DbContext
             entity.HasOne(d => d.Instrument).WithMany(p => p.Worklists)
                 .HasForeignKey(d => d.InstrumentId)
                 .HasConstraintName("FK_Worklist_Instrument");
+
         });
 
         OnModelCreatingPartial(modelBuilder);

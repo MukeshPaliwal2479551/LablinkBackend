@@ -15,7 +15,8 @@ public partial class User
 
     public bool IsActive { get; set; }
 
-    public string Password { get; set; } = null!;
+    public String? Password { get; set; } 
+
 
     public DateTime? CreatedOn { get; set; }
 

@@ -10,11 +10,11 @@
         "projectUniqueName": "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
         "projectName": "LabLinkBackend",
         "projectPath": "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
-        "packagesPath": "C:\\Users\\2479521\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\2479774\\.nuget\\packages\\",
         "outputPath": "C:\\LablinkBackend\\LabLinkBackend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\2479521\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\2479774\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -45,6 +45,22 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "JsonWebToken": {
+              "target": "Package",
+              "version": "[1.9.4, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[10.0.4, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[10.0.4, )"
@@ -68,6 +84,18 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[10.0.5, )"
+            },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[8.16.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[10.1.5, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.16.0, )"
             }
           },
           "imports": [
