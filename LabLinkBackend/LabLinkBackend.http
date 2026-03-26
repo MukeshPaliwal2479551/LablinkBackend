@@ -1,0 +1,6 @@
+@LabLinkBackend_HostAddress = http://localhost:5290
+
+GET {{LabLinkBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
