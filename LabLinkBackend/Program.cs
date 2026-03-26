@@ -1,41 +1,67 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using LabLinkBackend.Models;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using LabLinkBackend.Validation;
+
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+ 
+builder.Services.AddControllers();
+ 
+builder.Services.AddFluentValidationAutoValidation();
+ 
+builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
+var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured");
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+ 
+builder.Services.AddAuthentication(options =>
 {
-    app.MapOpenApi();
-}
-
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.WithName("GetWeatherForecast");
-
-app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+.AddJwtBearer(options =>
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtIssuer,
+        ValidAudience = jwtIssuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+    };
+});
+ 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+ 
+
+builder.Services.AddDbContext<LabLinkDbContext>(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
+ 
+var app = builder.Build();
+ 
+// 3. Configure the HTTP request pipeline
+// if (app.Environment.IsDevelopment())
+// {
+    app.UseSwagger();
+    app.UseSwaggerUI();
+// }
+ 
+app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+ 
+app.MapControllers();
+ 
+app.Run();
+ 
