@@ -7,15 +7,17 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using LabLinkBackend.Models;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using LabLinkBackend.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
  
 builder.Services.AddControllers();
  
-// Validator registration
-
+builder.Services.AddFluentValidationAutoValidation();
  
-// JWT Token Registration
+builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured");
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
  
@@ -41,9 +43,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
  
-//builder.Services.AddScoped(typeof(PharmaStock.Core.Interfaces.IGenericRepository<>), typeof(PharmaStock.Infrastructure.Repositories.GenericRepository<>));
-//if not typeof, you would have to specify the type of repository you want to use, but with typeof, you can use any repository you want by just passing the type of it as T.
- 
+
 builder.Services.AddDbContext<LabLinkDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );

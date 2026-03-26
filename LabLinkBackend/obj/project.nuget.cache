@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "fP8qm/XGmuU=",
+  "dgSpecHash": "0HDnzd4Nt7U=",
   "success": true,
   "projectFilePath": "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,9 @@
     "C:\\Users\\2479774\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\2479774\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\2479774\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",
+    "C:\\Users\\2479774\\.nuget\\packages\\fluentvalidation\\11.11.0\\fluentvalidation.11.11.0.nupkg.sha512",
+    "C:\\Users\\2479774\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.1\\fluentvalidation.aspnetcore.11.3.1.nupkg.sha512",
+    "C:\\Users\\2479774\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.11.0\\fluentvalidation.dependencyinjectionextensions.11.11.0.nupkg.sha512",
     "C:\\Users\\2479774\\.nuget\\packages\\gfoidl.analyzers\\0.2.0\\gfoidl.analyzers.0.2.0.nupkg.sha512",
     "C:\\Users\\2479774\\.nuget\\packages\\gfoidl.base64\\1.1.1\\gfoidl.base64.1.1.1.nupkg.sha512",
     "C:\\Users\\2479774\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
