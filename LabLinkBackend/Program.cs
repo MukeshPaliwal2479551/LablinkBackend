@@ -47,7 +47,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<LabLinkDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
- 
+ builder.Services.AddAuthorization();
 var app = builder.Build();
  
 // 3. Configure the HTTP request pipeline
