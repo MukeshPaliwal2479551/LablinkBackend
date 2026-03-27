@@ -73,7 +73,7 @@ public partial class LabLinkDbContext : DbContext
 
     public virtual DbSet<ResultEntry> ResultEntries { get; set; }
 
-    public virtual DbSet<Role> Roles { get; set; }
+    public virtual DbSet<Roles> Roles { get; set; }
 
     public virtual DbSet<Speciman> Specimen { get; set; }
 
@@ -506,7 +506,7 @@ public partial class LabLinkDbContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(100);
 
             entity.HasOne(d => d.PrimaryPhysician).WithMany(p => p.PatientPrimaryPhysicians)
-                .HasForeignKey(d => d.PrimaryPhysicianId)
+                .HasForeignKey(d => d.PrimaryPhysicianName)
                 .HasConstraintName("FK_Patient_Physician");
 
             entity.HasOne(d => d.User).WithOne(p => p.PatientUser)
@@ -663,13 +663,13 @@ public partial class LabLinkDbContext : DbContext
                 .HasConstraintName("FK_ResultEntry_Test");
         });
 
-        modelBuilder.Entity<Role>(entity =>
+        modelBuilder.Entity<Roles>(entity =>
         {
             entity.HasKey(e => e.RoleId).HasName("PK__Role__8AFACE1A917EB82E");
 
             entity.ToTable("Role");
 
-            entity.Property(e => e.Role1)
+            entity.Property(e => e.Role)
                 .HasMaxLength(50)
                 .HasColumnName("Role");
         });
