@@ -19,7 +19,7 @@ public partial class Patient
 
     public string? Address { get; set; }
 
-    public int? PrimaryPhysicianId { get; set; }
+    public string? PrimaryPhysicianName { get; set; }
 
     public bool IsActive { get; set; }
 
