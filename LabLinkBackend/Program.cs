@@ -60,8 +60,7 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
- 
+app.UseMiddleware<RoleAuthorizationMiddleware>();
 app.MapControllers();
- 
 app.Run();
  

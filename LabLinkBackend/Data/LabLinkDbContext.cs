@@ -15,6 +15,11 @@ public partial class LabLinkDbContext : DbContext
     {
     }
 
+    
+public virtual DbSet<Permission> Permissions { get; set; }
+public virtual DbSet<RolePermission> RolePermissions { get; set; }
+
+
     public virtual DbSet<Accession> Accessions { get; set; }
 
     public virtual DbSet<Addendum> Addenda { get; set; }
@@ -97,6 +102,29 @@ public partial class LabLinkDbContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+        
+  modelBuilder.Entity<Permission>(entity =>
+    {
+        entity.HasKey(e => e.PermissionId);
+        entity.Property(e => e.Name).IsRequired();
+        entity.Property(e => e.Code).IsRequired();
+    });
+
+        
+    modelBuilder.Entity<RolePermission>(entity =>
+    {
+        entity.HasKey(e => e.RolePermissionId);
+
+        entity.HasOne(d => d.Role)
+            .WithMany(p => p.RolePermissions)
+            .HasForeignKey(d => d.RoleId);
+
+        entity.HasOne(d => d.Permission)
+            .WithMany(p => p.RolePermissions)
+            .HasForeignKey(d => d.PermissionId);
+    });
+
         
         modelBuilder.Entity<Accession>(entity =>
         {
