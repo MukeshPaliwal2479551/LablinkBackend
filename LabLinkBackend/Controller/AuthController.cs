@@ -23,6 +23,7 @@ namespace LabLinkBackend.Controllers
         }
 
         [HttpPost]
+        
         public async Task<IActionResult> Login([FromBody] LoginDTO request)
         {
             if (request == null)
