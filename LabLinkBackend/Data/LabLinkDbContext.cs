@@ -78,7 +78,7 @@ public virtual DbSet<RolePermission> RolePermissions { get; set; }
 
     public virtual DbSet<ResultEntry> ResultEntries { get; set; }
 
-    public virtual DbSet<Role> Roles { get; set; }
+    public virtual DbSet<Roles> Roles { get; set; }
 
     public virtual DbSet<Speciman> Specimen { get; set; }
 
@@ -533,9 +533,7 @@ public virtual DbSet<RolePermission> RolePermissions { get; set; }
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.Name).HasMaxLength(100);
 
-            entity.HasOne(d => d.PrimaryPhysician).WithMany(p => p.PatientPrimaryPhysicians)
-                .HasForeignKey(d => d.PrimaryPhysicianId)
-                .HasConstraintName("FK_Patient_Physician");
+           
 
             entity.HasOne(d => d.User).WithOne(p => p.PatientUser)
                 .HasForeignKey<Patient>(d => d.UserId)
@@ -691,13 +689,13 @@ public virtual DbSet<RolePermission> RolePermissions { get; set; }
                 .HasConstraintName("FK_ResultEntry_Test");
         });
 
-        modelBuilder.Entity<Role>(entity =>
+        modelBuilder.Entity<Roles>(entity =>
         {
             entity.HasKey(e => e.RoleId).HasName("PK__Role__8AFACE1A917EB82E");
 
             entity.ToTable("Role");
 
-            entity.Property(e => e.Role1)
+            entity.Property(e => e.Role)
                 .HasMaxLength(50)
                 .HasColumnName("Role");
         });
@@ -823,7 +821,7 @@ public virtual DbSet<RolePermission> RolePermissions { get; set; }
                 .HasColumnName("Assigned_At");
             entity.Property(e => e.IsActive).HasDefaultValue(true);
 
-            entity.HasOne(d => d.Role).WithMany(p => p.UserRoles)
+            entity.HasOne(d => d.Roles).WithMany(p => p.UserRoles)
                 .HasForeignKey(d => d.RoleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserRole_Role");
