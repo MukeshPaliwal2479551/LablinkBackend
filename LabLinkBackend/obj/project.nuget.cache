@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0HDnzd4Nt7U=",
+  "dgSpecHash": "sAYqBROwoZY=",
   "success": true,
-  "projectFilePath": "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
+  "projectFilePath": "C:\\LablinkBackend\\LablinkBackend\\LabLinkBackend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\2479774\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\2479774\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
@@ -73,9 +73,9 @@
       "code": "NU1903",
       "level": "Warning",
       "message": "Package 'AutoMapper' 12.0.1 has a known high severity vulnerability, https://github.com/advisories/GHSA-rvv3-g6hj-g44x",
-      "projectPath": "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
+      "projectPath": "C:\\LablinkBackend\\LablinkBackend\\LabLinkBackend.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
+      "filePath": "C:\\LablinkBackend\\LablinkBackend\\LabLinkBackend.csproj",
       "libraryId": "AutoMapper",
       "targetGraphs": [
         "net10.0"

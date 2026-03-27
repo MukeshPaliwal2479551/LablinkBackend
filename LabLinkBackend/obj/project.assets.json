@@ -3884,11 +3884,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
+      "projectUniqueName": "C:\\LablinkBackend\\LablinkBackend\\LabLinkBackend.csproj",
       "projectName": "LabLinkBackend",
-      "projectPath": "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
+      "projectPath": "C:\\LablinkBackend\\LablinkBackend\\LabLinkBackend.csproj",
       "packagesPath": "C:\\Users\\2479774\\.nuget\\packages\\",
-      "outputPath": "C:\\LablinkBackend\\LabLinkBackend\\obj\\",
+      "outputPath": "C:\\LablinkBackend\\LablinkBackend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\2479774\\AppData\\Roaming\\NuGet\\NuGet.Config"
