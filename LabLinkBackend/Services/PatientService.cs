@@ -5,5 +5,6 @@ namespace LabLinkBackend.Services;
 
 public class PatientService : IPatientService
 {
+    
 }
 

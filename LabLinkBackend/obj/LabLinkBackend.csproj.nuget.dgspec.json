@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj": {}
+    "C:\\ClassProject\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj": {}
   },
   "projects": {
-    "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj": {
+    "C:\\ClassProject\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
+        "projectUniqueName": "C:\\ClassProject\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
         "projectName": "LabLinkBackend",
-        "projectPath": "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
-        "packagesPath": "C:\\Users\\2479774\\.nuget\\packages\\",
-        "outputPath": "C:\\LablinkBackend\\LabLinkBackend\\obj\\",
+        "projectPath": "C:\\ClassProject\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
+        "packagesPath": "C:\\Users\\2479519\\.nuget\\packages\\",
+        "outputPath": "C:\\ClassProject\\LablinkBackend\\LabLinkBackend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\2479774\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\2479519\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -39,7 +39,7 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.200"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net10.0": {
@@ -121,7 +121,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.200/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

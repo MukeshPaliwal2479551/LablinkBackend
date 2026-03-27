@@ -7,6 +7,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using LabLinkBackend.Models;
+using LabLinkBackend.Data;
+using LabLinkBackend.Services;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using LabLinkBackend.Validation;
@@ -42,6 +44,9 @@ builder.Services.AddAuthentication(options =>
  
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
  
 
 builder.Services.AddDbContext<LabLinkDbContext>(
