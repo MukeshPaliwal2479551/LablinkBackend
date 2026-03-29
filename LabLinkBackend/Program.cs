@@ -7,9 +7,12 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using LabLinkBackend.Models;
+using LabLinkBackend.Data;
+using LabLinkBackend.Services;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using LabLinkBackend.Validation;
+using LabLinkBackend.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
  
@@ -42,6 +45,12 @@ builder.Services.AddAuthentication(options =>
  
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IPatientService, PatientService>();
  
 
 builder.Services.AddDbContext<LabLinkDbContext>(
