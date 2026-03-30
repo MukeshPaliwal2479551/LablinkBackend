@@ -14,10 +14,12 @@ bin/
 obj/
 
 # NuGet Packages
-*.nuget.props
-*.nuget.targets
 packages/
 
-# Environment Variables (IMPORTANT for Security)
+# Environment variables / secrets
 .env
 appsettings.Development.json
+appsettings.Local.json
+
+# Ignore DLL files
+*.dll
