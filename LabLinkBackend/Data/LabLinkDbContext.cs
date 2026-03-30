@@ -16,8 +16,7 @@ public partial class LabLinkDbContext : DbContext
     }
 
     
-public virtual DbSet<Permission> Permissions { get; set; }
-public virtual DbSet<RolePermission> RolePermissions { get; set; }
+
 
 
     public virtual DbSet<Accession> Accessions { get; set; }
@@ -104,26 +103,11 @@ public virtual DbSet<RolePermission> RolePermissions { get; set; }
     {
 
         
-  modelBuilder.Entity<Permission>(entity =>
-    {
-        entity.HasKey(e => e.PermissionId);
-        entity.Property(e => e.Name).IsRequired();
-        entity.Property(e => e.Code).IsRequired();
-    });
+  
 
         
-    modelBuilder.Entity<RolePermission>(entity =>
-    {
-        entity.HasKey(e => e.RolePermissionId);
-
-        entity.HasOne(d => d.Role)
-            .WithMany(p => p.RolePermissions)
-            .HasForeignKey(d => d.RoleId);
-
-        entity.HasOne(d => d.Permission)
-            .WithMany(p => p.RolePermissions)
-            .HasForeignKey(d => d.PermissionId);
-    });
+    
+   
 
         
         modelBuilder.Entity<Accession>(entity =>
@@ -532,8 +516,6 @@ public virtual DbSet<RolePermission> RolePermissions { get; set; }
                 .IsFixedLength();
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.Name).HasMaxLength(100);
-
-           
 
             entity.HasOne(d => d.User).WithOne(p => p.PatientUser)
                 .HasForeignKey<Patient>(d => d.UserId)
