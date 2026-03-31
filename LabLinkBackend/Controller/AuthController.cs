@@ -50,7 +50,7 @@ namespace LabLinkBackend.Controllers
  
             var tokenString = GenerateJwtToken(user, roleNames);
  
-            return Ok(new //200
+            return Ok(new 
             {
                 token = tokenString,
                 userId = user.UserId,
