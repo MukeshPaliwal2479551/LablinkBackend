@@ -1,8 +1,8 @@
-using LabLinkBackend.Data;
+
 using LabLinkBackend.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace LabLinkBackend.Data;
+namespace LabLinkBackend.Repositories;
 
 public class PatientRepository : IPatientRepository
 {

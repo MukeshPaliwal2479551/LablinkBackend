@@ -7,7 +7,7 @@ namespace LabLinkBackend.Controller;
 
 [Route("api/{controller}")]
 
-public class UserController: baseController{
+public class UserController: ControllerBase{
     // [HttpGet]//our default url we have created 
     // public async Task<ActionResult<List<Employees>>> getall()
     // {
@@ -22,6 +22,12 @@ public class UserController: baseController{
     // {
     //     var data = employee.Include(e->e.Department);    
     // }
+
+    
+
+
+    
+ 
 
 
 

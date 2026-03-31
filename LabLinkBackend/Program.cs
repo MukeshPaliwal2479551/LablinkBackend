@@ -11,23 +11,23 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using LabLinkBackend.Validation;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);//creating the builder object
  
-builder.Services.AddControllers();
+builder.Services.AddControllers();//to handle requests look for controllers
  
-builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationAutoValidation();//It verifies the dataa comming from the user follows all the rules and constraints
  
 builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured");
-var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];//fetching from program.cs
  
-builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(options => //to use the bearer token. i want to secure my app and heres how to do that
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;//look for the jwt beare token in the url
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;//if no token send 401
 })
 .AddJwtBearer(options =>
-{
+{//strict rules for accepting the token
     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -40,15 +40,18 @@ builder.Services.AddAuthentication(options =>
     };
 });
  
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddEndpointsApiExplorer();//to use swagger it discovers the routes
 builder.Services.AddSwaggerGen();
  
 
-builder.Services.AddDbContext<LabLinkDbContext>(
+builder.Services.AddDbContext<LabLinkDbContext>( // to connect wiith the database registering the context
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
+builder.Services.AddScoped<LabLinkBackend.Repositories.IAuditLogRepository, LabLinkBackend.Repositories.AuditLogRepository>();
+builder.Services.AddScoped<LabLinkBackend.Services.IAuditLogService, LabLinkBackend.Services.AuditLogService>();
  
-var app = builder.Build();
+var app = builder.Build();//all the configuration is done and web app instance to be created
  
 // 3. Configure the HTTP request pipeline
 // if (app.Environment.IsDevelopment())
@@ -56,7 +59,7 @@ var app = builder.Build();
     app.UseSwagger();
     app.UseSwaggerUI();
 // }
- 
+//pipeline of middlewares that every request must go through
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -64,4 +67,3 @@ app.UseAuthorization();
 app.MapControllers();
  
 app.Run();
- 
