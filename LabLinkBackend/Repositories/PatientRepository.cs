@@ -28,15 +28,14 @@ public class PatientRepository : IPatientRepository
     public async Task<Patient> AddAsync(Patient patient)
     {
         await _context.Patients.AddAsync(patient);
+        await _context.SaveChangesAsync();
         return patient;
     }
 
     public async Task<Patient> UpdateAsync(Patient patient)
     {
         _context.Patients.Update(patient);
+        await _context.SaveChangesAsync();
         return patient;
     }
-
-    public async Task<int> SaveChangesAsync() =>
-        await _context.SaveChangesAsync();
 }

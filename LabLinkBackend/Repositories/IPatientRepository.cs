@@ -15,5 +15,4 @@ public interface IPatientRepository
 
     Task<Patient> UpdateAsync(Patient patient);
 
-    Task<int> SaveChangesAsync();
 }

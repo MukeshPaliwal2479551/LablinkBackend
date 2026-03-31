@@ -9,7 +9,6 @@ namespace LabLinkBackend.Controller;
 
 [ApiController]
 [Route("api/patients")]
-[Authorize]
 public class PatientController : ControllerBase
 {
     private readonly IPatientService _service;
@@ -23,18 +22,11 @@ public class PatientController : ControllerBase
     public async Task<IActionResult> Upsert([FromBody] PatientUpsertDto dto)
     {
 
-        var userIdClaim = User.FindFirst("userId");
-
-        if (userIdClaim == null)
-            return Unauthorized("UserId claim not found in token.");
-
-        if (!int.TryParse(userIdClaim.Value, out int userId))
-            return Unauthorized("Invalid UserId claim in token.");
 
         var patient = new Patient
         {
             PatientId = dto.PatientId ?? 0,
-            UserId = userId,
+            UserId = dto.UserId,
             Name = dto.Name,
             Dob = dto.Dob,
             Gender = dto.Gender,
