@@ -1,6 +1,10 @@
-namespace LabLinkBackend.Services;
+using LabLinkBackend.DTO;
 
-public interface IUserService
+namespace LabLinkBackend.Services
 {
+    public interface IUserService
+    {
+        Task<UserDto?> DeleteUser(int id);
+        Task<List<UserDto>> GetUsersAsync(string? name, string? phone);
+    }
 }
-
