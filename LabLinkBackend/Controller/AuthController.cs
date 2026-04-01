@@ -15,7 +15,7 @@ namespace LabLinkBackend.Controllers
     {
         private readonly LabLinkDbContext _context;
         private readonly IConfiguration _configuration;
- 
+  
         public LoginController(LabLinkDbContext context, IConfiguration configuration)
         {
             _context = context;

@@ -7,6 +7,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using LabLinkBackend.Models;
+using LabLinkBackend.Data;
+using LabLinkBackend.Services;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using LabLinkBackend.Validation;
@@ -16,7 +18,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
  
 builder.Services.AddFluentValidationAutoValidation();
- 
+ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+
+
 builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured");
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
@@ -42,6 +47,9 @@ builder.Services.AddAuthentication(options =>
  
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
  
 
 builder.Services.AddDbContext<LabLinkDbContext>(
