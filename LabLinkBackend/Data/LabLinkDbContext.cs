@@ -505,9 +505,10 @@ public partial class LabLinkDbContext : DbContext
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.Name).HasMaxLength(100);
 
-            entity.HasOne(d => d.PrimaryPhysician).WithMany(p => p.PatientPrimaryPhysicians)
-                .HasForeignKey(d => d.PrimaryPhysicianId)
-                .HasConstraintName("FK_Patient_Physician");
+            
+            entity.Property(e => e.PrimaryPhysicianName)
+                .HasMaxLength(100); // or whatever matches DB
+
 
             entity.HasOne(d => d.User).WithOne(p => p.PatientUser)
                 .HasForeignKey<Patient>(d => d.UserId)

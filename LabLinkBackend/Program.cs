@@ -12,6 +12,7 @@ using LabLinkBackend.Services;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using LabLinkBackend.Validation;
+using LabLinkBackend.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
  
@@ -19,6 +20,7 @@ builder.Services.AddControllers();
  
 builder.Services.AddFluentValidationAutoValidation();
  
+ //========================jwt=====================================
 builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured");
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
@@ -47,20 +49,17 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
- 
 
 builder.Services.AddDbContext<LabLinkDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
- 
+
 var app = builder.Build();
  
-// 3. Configure the HTTP request pipeline
-// if (app.Environment.IsDevelopment())
-// {
+
     app.UseSwagger();
     app.UseSwaggerUI();
-// }
+
  
 app.UseHttpsRedirection();
 app.UseAuthentication();

@@ -42,8 +42,6 @@ public partial class User
 
     public virtual ICollection<PathologyReview> PathologyReviews { get; set; } = new List<PathologyReview>();
 
-    public virtual ICollection<Patient> PatientPrimaryPhysicians { get; set; } = new List<Patient>();
-
     public virtual Patient? PatientUser { get; set; }
 
     public virtual ICollection<ResultEntry> ResultEntries { get; set; } = new List<ResultEntry>();

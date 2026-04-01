@@ -1,62 +1,25 @@
-## Build Folders
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+ 
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
 bin/
 obj/
-out/
-publish/
  
-## Visual Studio Files
-*.user
-*.suo
-*.userosscache
-*.userprefs
-*.vscode/
- 
-## VS Code settings
-.vscode/
- 
-## Logs
-*.log
- 
-## Compiled Binaries
-*.dll
-*.exe
-*.pdb
-*.mdb
- 
-## ASP.NET Generated Files
-appsettings.Development.json
-appsettings.Local.json
- 
-## NuGet
-*.nupkg
+# NuGet Packages
+*.nuget.props
+*.nuget.targets
 packages/
-.nuget/
  
-## Rider / JetBrains
-.idea/
-*.sln.iml
+# Environment Variables (IMPORTANT for Security)
+.env
+appsettings.Development.json
  
-## System Files
-Thumbs.db
-Desktop.ini
- 
-## Cache
-*.cache
-*.tmp
-*.temp
- 
-## Publish Profiles
-Properties/PublishProfiles/
- 
-## EF Core Migrations Snapshots
-*Migrations/*.Designer.cs
-*Migrations/*Snapshot.cs
- 
-## DotNet Tools
-.dotnet-tools/
- 
-## Other
-*.db
-*.sqlite
-*.sap
  

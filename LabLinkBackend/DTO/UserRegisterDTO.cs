@@ -22,5 +22,8 @@ namespace LabLinkBackend.DTO
         [MinLength(8)]
         [MaxLength(20)]
         public string Password { get; set; } = null!;
+
+        [Required]
+        public List<int> RoleIds { get; set; } = new List<int>();
     }
 }

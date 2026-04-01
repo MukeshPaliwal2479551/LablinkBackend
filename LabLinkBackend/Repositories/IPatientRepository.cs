@@ -1,8 +1,9 @@
 using LabLinkBackend.Models;
 
-namespace LabLinkBackend.Data;
+namespace LabLinkBackend.Repositories;
 
 public interface IPatientRepository
 {
-}
 
+
+}

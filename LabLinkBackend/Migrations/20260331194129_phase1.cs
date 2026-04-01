@@ -338,7 +338,7 @@ namespace LabLinkBackend.Migrations
                     Gender = table.Column<string>(type: "char(1)", unicode: false, fixedLength: true, maxLength: 1, nullable: true),
                     ContactInfo = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PrimaryPhysicianId = table.Column<int>(type: "int", nullable: true),
+                    PrimaryPhysicianName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
                     CreatedBy = table.Column<int>(type: "int", nullable: true)
@@ -346,11 +346,6 @@ namespace LabLinkBackend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__Patient__970EC36608EDAFF3", x => x.PatientId);
-                    table.ForeignKey(
-                        name: "FK_Patient_Physician",
-                        column: x => x.PrimaryPhysicianId,
-                        principalTable: "User",
-                        principalColumn: "UserId");
                     table.ForeignKey(
                         name: "FK_Patient_User",
                         column: x => x.UserId,
@@ -1102,11 +1097,6 @@ namespace LabLinkBackend.Migrations
                 name: "IX_PathologyReview_UserId",
                 table: "PathologyReview",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Patient_PrimaryPhysicianId",
-                table: "Patient",
-                column: "PrimaryPhysicianId");
 
             migrationBuilder.CreateIndex(
                 name: "UQ__Patient__1788CC4D85CB9787",

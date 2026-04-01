@@ -44,5 +44,32 @@ public class UserRepository : IUserRepository
         await _labLinkDbContext.SaveChangesAsync();
         return user;
     }
+
+    async public Task CreateUserRole(UserRole userRole)
+    {
+        await _labLinkDbContext.UserRoles.AddAsync(userRole);
+        await _labLinkDbContext.SaveChangesAsync();
+    }
+
+    async public Task DeleteUserRolesByUserId(int userId)
+    {
+        var existingRoles = _labLinkDbContext.UserRoles.Where(ur => ur.UserId == userId);
+        _labLinkDbContext.UserRoles.RemoveRange(existingRoles);
+        await _labLinkDbContext.SaveChangesAsync();
+    }
+
+    async public Task AddUserRoles(IEnumerable<UserRole> userRoles)
+    {
+        await _labLinkDbContext.UserRoles.AddRangeAsync(userRoles);
+        await _labLinkDbContext.SaveChangesAsync();
+    }
+
+    async public Task<User?> GetByIdWithRoles(int id)
+    {
+        return await _labLinkDbContext.Users
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+            .FirstOrDefaultAsync(u => u.UserId == id);
+    }
 }
 

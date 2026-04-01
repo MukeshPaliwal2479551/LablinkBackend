@@ -1,5 +1,5 @@
-using LabLinkBackend.Services;
-using LabLinkBackend.Data;
+using LabLinkBackend.Models;
+using LabLinkBackend.Repositories;
 
 namespace LabLinkBackend.Services;
 
@@ -7,4 +7,3 @@ public class PatientService : IPatientService
 {
     
 }
-

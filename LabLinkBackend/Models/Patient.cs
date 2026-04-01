@@ -19,7 +19,7 @@ public partial class Patient
 
     public string? Address { get; set; }
 
-    public int? PrimaryPhysicianId { get; set; }
+    public string? PrimaryPhysicianName { get; set; }
 
     public bool IsActive { get; set; }
 
@@ -32,8 +32,6 @@ public partial class Patient
     public virtual ICollection<InvoiceRef> InvoiceRefs { get; set; } = new List<InvoiceRef>();
 
     public virtual ICollection<LabOrder> LabOrders { get; set; } = new List<LabOrder>();
-
-    public virtual User? PrimaryPhysician { get; set; }
 
     public virtual User User { get; set; } = null!;
 }
