@@ -50,6 +50,9 @@ builder.Services.AddDbContext<LabLinkDbContext>(
 
 builder.Services.AddScoped<LabLinkBackend.Repositories.IAuditLogRepository, LabLinkBackend.Repositories.AuditLogRepository>();
 builder.Services.AddScoped<LabLinkBackend.Services.IAuditLogService, LabLinkBackend.Services.AuditLogService>();
+
+builder.Services.AddScoped<LabLinkBackend.Repositories.IClientRepository, LabLinkBackend.Repositories.ClientRepository>();
+builder.Services.AddScoped<LabLinkBackend.Services.IClientService, LabLinkBackend.Services.ClientService>();
  
 var app = builder.Build();
 
