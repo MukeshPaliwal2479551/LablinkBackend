@@ -17,12 +17,12 @@ public partial class User
 
     public string Password { get; set; }  = null!;
 
-
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? LastLoginAt { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
 
     public virtual ICollection<Addendum> Addenda { get; set; } = new List<Addendum>();
 
@@ -54,3 +54,5 @@ public partial class User
 
     public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }
+  
+  
