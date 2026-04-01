@@ -16,6 +16,6 @@ public partial class AuditLog
     public DateTime? Timestamp { get; set; }
 
     public string? Metadata { get; set; }
-
+    
     public virtual User User { get; set; } = null!;
 }

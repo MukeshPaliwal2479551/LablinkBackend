@@ -1,25 +1,24 @@
 using LabLinkBackend.Models;
 using Microsoft.EntityFrameworkCore;
-
 namespace LabLinkBackend.Repositories
 {
     public class UserRepository : IUserRepository
     {
         private readonly LabLinkDbContext context;
-
         public UserRepository(LabLinkDbContext _context)
         {
             context = _context;
         }
-        public async Task<User?> DeleteUser(int id)
+        public async Task<bool> DeleteUser(int id)
         {
             var user = await context.Users.FirstOrDefaultAsync(u => u.UserId == id);
             if (user == null)
-                return null;
+                return false;
             context.Users.Remove(user);
             await context.SaveChangesAsync();
-            return user;
+            return true;
         }
+
     public async Task<List<User>> GetUsersAsync(string? name, string? phone)
     {
         var query = context.Users.AsQueryable();

@@ -11,6 +11,9 @@ using FluentValidation.AspNetCore;
 using FluentValidation;
 using LabLinkBackend.Validation;
 
+using LabLinkBackend.Services;
+using LabLinkBackend.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
  
 builder.Services.AddControllers();
@@ -47,6 +50,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<LabLinkDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
  
 var app = builder.Build();
  

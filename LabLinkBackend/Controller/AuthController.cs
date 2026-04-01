@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using LabLinkBackend.Models;
 using JsonWebToken.DTO;
-
+ 
 namespace LabLinkBackend.Controllers
 {
     [ApiController]
@@ -15,13 +15,13 @@ namespace LabLinkBackend.Controllers
     {
         private readonly LabLinkDbContext _context;
         private readonly IConfiguration _configuration;
-
+ 
         public LoginController(LabLinkDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
         }
-
+ 
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginDTO request)
         {
@@ -29,29 +29,29 @@ namespace LabLinkBackend.Controllers
             {
                 return BadRequest(new { message = "Invalid Client Request" });
             }
-
+ 
             // 1. Fetch User
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Email == request.Email);
-
+ 
             if (user == null)
                 return Unauthorized(new { message = "Invalid Email" });
-
+ 
             // 2. Fetch UserRole and Role
             var userRole = await _context.UserRoles
-                .Include(ur => ur.Role)
+                .Include(ur => ur.Roles)
                 .Where(ur => ur.UserId == user.UserId).ToListAsync();
-
+ 
             if (userRole == null)
                 return Unauthorized(new { message = "User role not assigned" });
-
+ 
             // 3. Check password
             if (request.Password != user.Password)
                 return Unauthorized(new { message = "Invalid password" });
               var roleIds = userRole.Select(e=>e.RoleId);
             // 4. Generate JWT Token
             var tokenString = GenerateJwtToken(user, roleIds);
-
+ 
             return Ok(new
             {
                 token = tokenString,
@@ -59,7 +59,6 @@ namespace LabLinkBackend.Controllers
                 roleId = userRole.Select(e=>e.RoleId)
             });
         }
-
         private string GenerateJwtToken(User user, IEnumerable<int> roleId)
         {
             var claims = new[]
@@ -68,13 +67,13 @@ namespace LabLinkBackend.Controllers
                 new Claim("userId", user.UserId.ToString()),
                 new Claim("roleId", roleId.ToString())
             };
-
+ 
             var jwtKey = _configuration["Jwt:Key"]
                          ?? throw new InvalidOperationException("JWT Key not configured");
-
+ 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
+ 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Issuer"],
@@ -82,7 +81,7 @@ namespace LabLinkBackend.Controllers
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: creds
             );
-
+ 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

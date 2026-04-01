@@ -23,11 +23,9 @@ namespace LabLinkBackend.Services
                 IsActive = user.IsActive
             };
         }
-
-        public async Task<UserDto?> DeleteUser(int id)
+        public async Task<bool> DeleteUser(int id)
         {
-            var user = await repository.DeleteUser(id);
-            return user == null ? null : MapToDto(user);
+            return await repository.DeleteUser(id);
         }
         public async Task<List<UserDto>> GetUsersAsync(string? name, string? phone)
         {

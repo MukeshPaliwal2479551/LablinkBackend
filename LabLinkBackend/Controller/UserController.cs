@@ -12,14 +12,20 @@ namespace LabLinkBackend.Controllers
         public UserController(IUserService service)
         {
             _service = service;
-        }
+        }     
         [HttpDelete]
-        [Route("DeleteUser/{id}")]
+        [Route("delete/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var result = await _service.DeleteUser(id);
-
-            if (result == null)
+            if (id <= 0)
+            {
+                return BadRequest(new
+                {
+                    Message = "Invalid user id. Id must be greater than zero."
+                });
+            }
+            var isDeleted = await _service.DeleteUser(id);
+            if (!isDeleted)
             {
                 return NotFound(new
                 {
@@ -28,13 +34,12 @@ namespace LabLinkBackend.Controllers
             }
             return Ok(new
             {
-                Message = "User deleted successfully",
-                Data = result
+                Message = "User deleted successfully"
             });
         }
         [HttpGet]
         [Route("GetUser")]
-        public async Task<IActionResult> GetUsers(string? name,string? phone)
+        public async Task<IActionResult> GetUsers(string? name, string? phone)
         {
             var users = await _service.GetUsersAsync(name, phone);
             if (users == null || !users.Any())

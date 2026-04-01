@@ -3879,7 +3879,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\2479774\\.nuget\\packages\\": {}
+    "C:\\Users\\2479521\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
@@ -3887,11 +3887,11 @@
       "projectUniqueName": "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
       "projectName": "LabLinkBackend",
       "projectPath": "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
-      "packagesPath": "C:\\Users\\2479774\\.nuget\\packages\\",
+      "packagesPath": "C:\\Users\\2479521\\.nuget\\packages\\",
       "outputPath": "C:\\LablinkBackend\\LabLinkBackend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\2479774\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\2479521\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
