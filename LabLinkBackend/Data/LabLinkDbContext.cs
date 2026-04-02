@@ -101,16 +101,7 @@ public partial class LabLinkDbContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
-        
-  
-
-        
-    
-   
-
-        
-        modelBuilder.Entity<Accession>(entity =>
+      modelBuilder.Entity<Accession>(entity =>
         {
             entity.HasKey(e => e.AccessionId).HasName("PK__Accessio__B4B2533D91A55B9E");
 

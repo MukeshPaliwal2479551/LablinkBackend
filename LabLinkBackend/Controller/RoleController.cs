@@ -14,14 +14,6 @@ public class RoleController : ControllerBase
     {
         _service = service;
     }
-
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateRole(RoleDto dto)
-    {
-        var result = await _service.CreateRoleAsync(dto);
-        return Ok(result);
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetRoles()
     {
