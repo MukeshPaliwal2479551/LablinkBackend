@@ -15,10 +15,6 @@ public partial class LabLinkDbContext : DbContext
     {
     }
 
-    
-
-
-
     public virtual DbSet<Accession> Accessions { get; set; }
 
     public virtual DbSet<Addendum> Addenda { get; set; }
