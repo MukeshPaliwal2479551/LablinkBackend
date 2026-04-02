@@ -9,11 +9,6 @@ namespace LabLinkBackend.DTO
         public string Name { get; set; } = null!;
 
         [Required]
-        [EmailAddress]
-        [MaxLength(150)]
-        public string Email { get; set; } = null!;
-
-        [Required]
         [Phone]
         [MaxLength(20)]
         public string Phone { get; set; } = null!;
@@ -24,7 +19,6 @@ namespace LabLinkBackend.DTO
         [MinLength(8)]
         [MaxLength(20)]
         public string? Password { get; set; }
-
 
     }
 }

@@ -17,7 +17,6 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    
     [HttpPost]
     [Route("register")]
     public async Task<IActionResult> CreateUser(UserRegisterDTO userRegisterDTO)
@@ -70,10 +69,10 @@ public class UserController : ControllerBase
             {
                 updatedUser.UserId,
                 updatedUser.Name,
-                updatedUser.Email,
                 updatedUser.Phone,
                 updatedUser.IsActive,
-                updatedUser.UpdatedOn
+                updatedUser.UpdatedOn,
+                updatedUser.Email
             };
 
             return Ok(new { message = "User updated successfully", data = response });

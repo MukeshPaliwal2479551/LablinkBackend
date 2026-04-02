@@ -19,11 +19,7 @@ public class UserService : IUserService
         var existingByEmail = await _userRepository.GetByEmail(userRegisterDTO.Email);
         if (existingByEmail != null)
             throw new InvalidOperationException("A user with this email already exists.");
-
-        var existingByPhone = await _userRepository.GetByPhone(userRegisterDTO.Phone);
-        if (existingByPhone != null)
-            throw new InvalidOperationException("A user with this phone number already exists.");
-
+            
         var user = new User
         {
             Name = userRegisterDTO.Name.Trim(),
@@ -58,24 +54,13 @@ public class UserService : IUserService
 
     public async Task<User> UpdateUser(int id, UserUpdateDTO userUpdateDTO)
     {
-
         var existingUser = await _userRepository.GetById(id);
         if (existingUser == null)
             throw new KeyNotFoundException("User not found.");
 
-        var existingByEmail = await _userRepository.GetByEmail(userUpdateDTO.Email);
-        if (existingByEmail != null && existingByEmail.UserId != id)
-            throw new InvalidOperationException("A user with this email already exists.");
-
-        var existingByPhone = await _userRepository.GetByPhone(userUpdateDTO.Phone);
-        if (existingByPhone != null && existingByPhone.UserId != id)
-            throw new InvalidOperationException("A user with this phone number already exists.");
-
         existingUser.Name = userUpdateDTO.Name.Trim();
-        existingUser.Email = string.IsNullOrWhiteSpace(userUpdateDTO.Email) ? 
-            throw new InvalidOperationException("Invalid Email") : userUpdateDTO.Email.Trim();
         existingUser.Phone = string.IsNullOrWhiteSpace(userUpdateDTO.Phone) ?
-            throw new InvalidOperationException("Invalid Phone number") : userUpdateDTO.Email.Trim();
+            throw new InvalidOperationException("Invalid Phone number") : userUpdateDTO.Phone.Trim();
         existingUser.IsActive = userUpdateDTO.IsActive;
         if (!string.IsNullOrWhiteSpace(userUpdateDTO.Password))
         {
