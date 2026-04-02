@@ -6,10 +6,11 @@ public interface IPatientRepository
 {
     Task<Patient?> GetByIdAsync(int patientId);
 
-    Task<Patient?> GetByNameDobPhoneAsync(
+  Task<Patient?> IsPatientExistAsync(
         string name,
         DateOnly? dob,
         string? phone);
+
 
     Task<Patient> AddAsync(Patient patient);
 

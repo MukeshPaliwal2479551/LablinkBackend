@@ -16,7 +16,8 @@ public class PatientRepository : IPatientRepository
     public async Task<Patient?> GetByIdAsync(int patientId) =>
         await _context.Patients.FindAsync(patientId);
 
-    public async Task<Patient?> GetByNameDobPhoneAsync(
+
+    public async Task<Patient?> IsPatientExistAsync(
         string name,
         DateOnly? dob,
         string? phone) =>
@@ -24,6 +25,7 @@ public class PatientRepository : IPatientRepository
             p.Name.ToLower() == name.ToLower() &&
             p.Dob == dob &&
             p.ContactInfo == phone);
+
 
     public async Task<Patient> AddAsync(Patient patient)
     {
