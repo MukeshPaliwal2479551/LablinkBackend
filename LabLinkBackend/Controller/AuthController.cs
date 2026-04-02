@@ -38,17 +38,17 @@ namespace LabLinkBackend.Controllers
                 return Unauthorized(new { message = "Invalid Email" });
 
             // 2. Fetch UserRole and Role
-            var userRole = await _context.UserRoles
-                .Include(ur => ur.Role)
+            var userRoles = await _context.UserRoles
+                .Include(ur => ur.Roles)
                 .Where(ur => ur.UserId == user.UserId).ToListAsync();
 
-            if (userRole == null)
+            if (userRoles == null)
                 return Unauthorized(new { message = "User role not assigned" });
 
             // 3. Check password
             if (request.Password != user.Password)
                 return Unauthorized(new { message = "Invalid password" });
-              var roleIds = userRole.Select(e=>e.RoleId);
+              var roleIds = userRoles.Select(e=>e.RoleId);
             // 4. Generate JWT Token
             var tokenString = GenerateJwtToken(user, roleIds);
 
@@ -56,7 +56,7 @@ namespace LabLinkBackend.Controllers
             {
                 token = tokenString,
                 userId = user.UserId,
-                roleId = userRole.Select(e=>e.RoleId)
+                roleId = userRoles.Select(e=>e.RoleId)
             });
         }
 

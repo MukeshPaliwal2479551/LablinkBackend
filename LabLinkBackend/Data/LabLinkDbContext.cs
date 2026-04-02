@@ -505,9 +505,7 @@ public partial class LabLinkDbContext : DbContext
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.Name).HasMaxLength(100);
 
-            entity.HasOne(d => d.PrimaryPhysician).WithMany(p => p.PatientPrimaryPhysicians)
-                .HasForeignKey(d => d.PrimaryPhysicianName)
-                .HasConstraintName("FK_Patient_Physician");
+            
 
             entity.HasOne(d => d.User).WithOne(p => p.PatientUser)
                 .HasForeignKey<Patient>(d => d.UserId)
@@ -795,7 +793,7 @@ public partial class LabLinkDbContext : DbContext
                 .HasColumnName("Assigned_At");
             entity.Property(e => e.IsActive).HasDefaultValue(true);
 
-            entity.HasOne(d => d.Role).WithMany(p => p.UserRoles)
+            entity.HasOne(d => d.Roles).WithMany(p => p.UserRoles)
                 .HasForeignKey(d => d.RoleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_UserRole_Role");

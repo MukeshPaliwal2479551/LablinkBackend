@@ -10,6 +10,8 @@ using LabLinkBackend.Models;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using LabLinkBackend.Validation;
+using LabLinkBackend.Services;
+using LabLinkBackend.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
  
@@ -42,6 +44,9 @@ builder.Services.AddAuthentication(options =>
  
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IPatientService, PatientService>();
  
 
 builder.Services.AddDbContext<LabLinkDbContext>(
