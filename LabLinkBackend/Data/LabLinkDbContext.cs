@@ -14,11 +14,6 @@ public partial class LabLinkDbContext : DbContext
         : base(options)
     {
     }
-
-    
-
-
-
     public virtual DbSet<Accession> Accessions { get; set; }
 
     public virtual DbSet<Addendum> Addenda { get; set; }
@@ -102,14 +97,6 @@ public partial class LabLinkDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
-        
-  
-
-        
-    
-   
-
-        
         modelBuilder.Entity<Accession>(entity =>
         {
             entity.HasKey(e => e.AccessionId).HasName("PK__Accessio__B4B2533D91A55B9E");
