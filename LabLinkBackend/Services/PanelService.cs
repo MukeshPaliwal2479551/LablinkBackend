@@ -1,0 +1,114 @@
+
+using LabLinkBackend.DTO;
+using LabLinkBackend.Models;
+using LabLinkBackend.Repositories;
+using LabLinkBackend.Services;
+
+
+namespace LabLinkBackend.Services;
+
+
+public class PanelService : IPanelService
+{
+    private readonly IPanelRepository _repository;
+    private readonly IAuditLogService _auditLogService;
+
+    public PanelService(IPanelRepository repository, IAuditLogService auditLogService)
+    {
+        _repository = repository;
+        _auditLogService = auditLogService;
+    }
+
+
+    public async Task<(bool Success, PanelResultDto? Data, string? Error)> CreatePanelAsync(CreatePanelDto dto)
+    {
+        // Validate panel code unique
+        if (await _repository.IsPanelCodeExistsAsync(dto.PanelCode))
+        {
+            return (false, null, "Panel code already exists");
+        }
+
+        // Get active tests
+        var activeTests = await _repository.GetActiveTestsByIdsAsync(dto.TestIds);
+        
+        if (activeTests.Count != dto.TestIds.Count)
+        {
+            return (false, null, "One or more tests do not exist or are inactive. Only active tests allowed.");
+        }
+
+        // Create panel and tests
+        var panel = await _repository.CreatePanelWithTestsAsync(dto, activeTests);
+        if (panel == null)
+        {
+            return (false, null, "Failed to create panel");
+        }
+
+        // Map to result DTO
+        var result = new PanelResultDto
+        {
+            PanelId = panel.PanelId,
+            PanelCode = panel.PanelCode,
+            PanelName = panel.PanelName,
+            IsActive = panel.IsActive,
+            CreatedAt = DateTime.UtcNow
+        };
+
+
+        return (true, result, null);
+    }
+
+    public async Task<(bool Success, PanelResultDto? Data, string? Error)> UpdatePanelAsync(UpdatePanelDto dto, int userId)
+    {
+        // Validate tests active
+        var activeTests = await _repository.GetActiveTestsByIdsAsync(dto.TestIds);
+        if (activeTests.Count != dto.TestIds.Count)
+        {
+            return (false, null, "One or more tests are inactive. Only active tests allowed.");
+        }
+
+        // Get existing panel
+        var panel = await _repository.GetPanelByIdAsync(dto.PanelId);
+        if (panel == null)
+        {
+            return (false, null, "Panel not found.");
+        }
+
+        // Update properties
+        if (!string.IsNullOrEmpty(dto.PanelName))
+            panel.PanelName = dto.PanelName;
+        if (dto.IsActive.HasValue)
+            panel.IsActive = dto.IsActive.Value;
+
+        // Sync tests - delete old, add new
+        await _repository.DeletePanelTestsByPanelIdAsync(panel.PanelId);
+        await _repository.AddPanelTestsAsync(panel.PanelId, activeTests);
+
+
+        // Save changes
+        await _repository.UpdatePanelAsync(panel);
+
+
+        // Audit log
+        var auditDto = new AuditDto
+        {
+            UserId = userId,
+            Action = "PanelUpdated",
+            Resource = $"Panel/{panel.PanelId}",
+            Metadata = $"Tests count: {dto.TestIds.Count}, Name: {panel.PanelName}, Active: {panel.IsActive}"
+        };
+        await _auditLogService.CreateLogAsync(auditDto);
+
+        // Map result
+        var result = new PanelResultDto
+        {
+            PanelId = panel.PanelId,
+            PanelCode = panel.PanelCode,  // Unchanged
+            PanelName = panel.PanelName,
+            IsActive = panel.IsActive,
+            CreatedAt = DateTime.UtcNow  // Reuse or add UpdatedAt
+        };
+
+        return (true, result, null);
+    }
+}
+
