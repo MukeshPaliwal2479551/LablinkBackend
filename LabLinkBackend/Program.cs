@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using LabLinkBackend.Models;
 using LabLinkBackend.Data;
 using LabLinkBackend.Services;
+using LabLinkBackend.Repositories;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using LabLinkBackend.Validation;
@@ -19,14 +20,17 @@ builder.Services.AddControllers();
  
 builder.Services.AddFluentValidationAutoValidation();
  builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IRoleService, RoleService>();
+ builder.Services.AddScoped<IRoleService, RoleService>();
+ builder.Services.AddScoped<IPanelRepository, PanelRepository>();
+ builder.Services.AddScoped<IPanelService, PanelService>();
+ builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+ builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 
-
-builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
+ builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured");
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
  
-builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(options => 
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -49,23 +53,18 @@ builder.Services.AddSwaggerGen();
 
 
 
-builder.Services.AddDbContext<LabLinkDbContext>(
+builder.Services.AddDbContext<LabLinkDbContext>( 
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
  builder.Services.AddAuthorization();
 var app = builder.Build();
- 
-// 3. Configure the HTTP request pipeline
-// if (app.Environment.IsDevelopment())
-// {
+
     app.UseSwagger();
     app.UseSwaggerUI();
-// }
- 
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
- 

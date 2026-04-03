@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LabLinkBackend.Repositories;
 
-public class PatientRepository : IPatientRepository
+public class UserRepository : IUserRepository
 {
 }
 
