@@ -1,14 +1,10 @@
-# Audit Logging Implementation TODO
+# AuditLog Endpoint Fix - Invalid UserId FK Error
 
 ## Steps:
-- [ ] 1. Create DTO/AuditDto.cs
-- [ ] 2. Create DTO/AuditLogResult.cs  
-- [ ] 3. Create Repositories/IAuditLogRepository.cs
-- [ ] 4. Create Repositories/AuditLogRepository.cs
-- [ ] 5. Create Services/IAuditLogService.cs
-- [ ] 6. Create Services/AuditLogService.cs
-- [ ] 7. Create Controller/AuditController.cs
-✅ 8. Edit Program.cs to add DI registrations
-✅ 9. dotnet build & test API via Swagger (POST /api/Audit/CreateAudit)
+- [x] 1. Create TODO.md
+- [ ] 2. Update AuditLogRepository.cs: Add User exists check + DbUpdateException handling
+- [ ] 3. Rebuild and test with valid UserId
+- [ ] 4. Verify DB has users: SELECT TOP 5 UserId, Name FROM [dbo].[User];
+- [ ] 5. Update TODO.md and complete
 
-Progress tracked here.
+**Next**: User must insert a test user or use existing UserId, then endpoint works.

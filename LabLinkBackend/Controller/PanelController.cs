@@ -7,7 +7,7 @@ namespace LabLinkBackend.Controller;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]  // Requires JWT auth
+//[Authorize]  // Requires JWT auth
 public class PanelController : ControllerBase
 {
     private readonly IPanelService _panelService;
