@@ -1,10 +1,8 @@
-
+using LabLinkBackend.DTO;
 using LabLinkBackend.Models;
 using LabLinkBackend.Repositories;
 
 namespace LabLinkBackend.Services;
-
-
 
 public class PatientService : IPatientService
 {
@@ -15,81 +13,68 @@ public class PatientService : IPatientService
         _repository = repository;
     }
 
-    public async Task<Patient> UpsertPatientAsync(Patient patient)
+    public async Task<PatientResponseDto> UpsertPatientAsync(PatientUpsertDto dto)
     {
-
-        if (patient.UserId <= 0)
-            throw new InvalidOperationException("Authenticated user is required.");
-
-        bool isCreate = patient.PatientId == 0;
-        bool isUpdate = patient.PatientId > 0;
-
+        bool isCreate = dto.IsCreate;
 
         if (isCreate)
         {
-            if (string.IsNullOrWhiteSpace(patient.Name))
-                throw new InvalidOperationException("Patient name is required.");
+            bool exists = await _repository.IsPatientExistAsync(
+                dto.Name,
+                dto.Dob,
+                dto.ContactInfo
+            );
 
-            if (string.IsNullOrWhiteSpace(patient.ContactInfo))
-                throw new InvalidOperationException("Contact information is required.");
-
-            if (string.IsNullOrWhiteSpace(patient.Gender))
-                throw new InvalidOperationException("Gender is required.");
-
-            if (patient.Dob == null)
-                throw new InvalidOperationException("Date of birth is required.");
-        }
-
-
-        if (!string.IsNullOrWhiteSpace(patient.Name) &&
-            !string.IsNullOrWhiteSpace(patient.ContactInfo))
-        {
-            var duplicate = await _repository.IsPatientExistAsync(
-                patient.Name,
-                patient.Dob,
-                patient.ContactInfo);
-
-            if (duplicate != null && duplicate.PatientId != patient.PatientId)
+            if (exists)
                 throw new InvalidOperationException("Duplicate patient detected.");
+
+            var patient = new Patient
+            {
+                UserId = dto.UserId,
+                Name = dto.Name,
+                Dob = dto.Dob,
+                Gender = dto.Gender,
+                ContactInfo = dto.ContactInfo,
+                Address = dto.Address,
+                IsActive = true,
+                PrimaryPhysicianName = dto.PrimaryPhysicianName,
+                CreatedOn = DateTime.UtcNow
+            };
+
+            var created = await _repository.AddAsync(patient);
+            return MapToResponse(created);
         }
 
+        var existing = await _repository.GetByIdAsync(dto.PatientId!.Value);
 
-        if (isUpdate)
+        if (existing == null)
+            throw new InvalidOperationException("Patient not found.");
+
+        existing.Name = dto.Name;
+        existing.Dob = dto.Dob;
+        existing.Gender = dto.Gender;
+        existing.ContactInfo = dto.ContactInfo;
+        existing.Address = dto.Address;
+        existing.IsActive = dto.IsActive;
+        existing.PrimaryPhysicianName = dto.PrimaryPhysicianName;
+
+        var updated = await _repository.UpdateAsync(existing);
+        return MapToResponse(updated);
+    }
+
+    private static PatientResponseDto MapToResponse(Patient patient)
+    {
+        return new PatientResponseDto
         {
-            var existing = await _repository.GetByIdAsync(patient.PatientId);
-
-            if (existing == null)
-                throw new InvalidOperationException("Patient not found.");
-
-            if (existing.UserId != patient.UserId)
-                throw new UnauthorizedAccessException(
-                    "You cannot modify another user's patient record.");
-
-
-            if (patient.Name != null)
-                existing.Name = patient.Name;
-
-            if (patient.Dob != null)
-                existing.Dob = patient.Dob;
-
-            if (patient.Gender != null)
-                existing.Gender = patient.Gender;
-
-            if (patient.ContactInfo != null)
-                existing.ContactInfo = patient.ContactInfo;
-
-            if (patient.Address != null)
-                existing.Address = patient.Address;
-
-            existing.IsActive = patient.IsActive;
-            existing.PrimaryPhysicianName = patient.PrimaryPhysicianName;
-
-            return await _repository.UpdateAsync(existing);
-        }
-
-        patient.IsActive = true;
-        patient.CreatedOn = DateTime.UtcNow;
-
-        return await _repository.AddAsync(patient);
+            PatientId = patient.PatientId,
+            UserId = patient.UserId,
+            Name = patient.Name,
+            Dob = patient.Dob,
+            Gender = patient.Gender,
+            ContactInfo = patient.ContactInfo,
+            Address = patient.Address,
+            IsActive = patient.IsActive,
+            PrimaryPhysicianName = patient.PrimaryPhysicianName
+        };
     }
 }

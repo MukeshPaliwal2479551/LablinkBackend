@@ -19,36 +19,10 @@ public class PatientController : ControllerBase
     }
 
     [HttpPost("upsert")]
-    public async Task<IActionResult> Upsert( PatientUpsertDto dto)
+    public async Task<IActionResult> Upsert(PatientUpsertDto dto)
     {
+        var result = await _service.UpsertPatientAsync(dto);
 
-
-        var patient = new Patient
-        {
-            PatientId = dto.PatientId ?? 0,
-            UserId = dto.UserId,
-            Name = dto.Name,
-            Dob = dto.Dob,
-            Gender = dto.Gender,
-            ContactInfo = dto.ContactInfo,
-            Address = dto.Address,
-            IsActive = dto.IsActive,
-            PrimaryPhysicianName = dto.PrimaryPhysicianName
-        };
-
-        var result = await _service.UpsertPatientAsync(patient);
-
-        return Ok(new PatientResponseDto
-        {
-            PatientId = result.PatientId,
-            UserId = result.UserId,
-            Name = result.Name,
-            Dob = result.Dob,
-            Gender = result.Gender,
-            ContactInfo = result.ContactInfo,
-            Address = result.Address,
-            IsActive = result.IsActive,
-            PrimaryPhysicianName = result.PrimaryPhysicianName
-        });
+        return Ok(result);
     }
 }

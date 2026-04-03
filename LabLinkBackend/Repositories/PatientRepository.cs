@@ -17,15 +17,17 @@ public class PatientRepository : IPatientRepository
         await _context.Patients.FindAsync(patientId);
 
 
-    public async Task<Patient?> IsPatientExistAsync(
-        string name,
-        DateOnly? dob,
-        string? phone) =>
-        await _context.Patients.FirstOrDefaultAsync(p =>
+    public async Task<bool> IsPatientExistAsync(
+    string name,
+    DateOnly dob,
+    string phone)
+    {
+        return await _context.Patients.AnyAsync(p =>
             p.Name.ToLower() == name.ToLower() &&
             p.Dob == dob &&
-            p.ContactInfo == phone);
-
+            p.ContactInfo == phone
+        );
+    }
 
     public async Task<Patient> AddAsync(Patient patient)
     {
