@@ -23,7 +23,6 @@ public class PatientController : ControllerBase
     {
         var result = await _service.UpsertPatientAsync(patientUpsertDto);
 
-
         var message = patientUpsertDto.IsCreate
                ? "Patient created successfully."
                : "Patient updated successfully.";
