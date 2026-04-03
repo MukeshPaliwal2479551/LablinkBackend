@@ -19,7 +19,7 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [Route("register")]
-    public async Task<IActionResult> CreateUser(UserRegisterDTO userRegisterDTO)
+    public async Task<IActionResult> Create(UserRegisterDTO userRegisterDTO)
     {
         if (userRegisterDTO == null)
             return BadRequest(new { message = "User registration data is required." });
@@ -56,7 +56,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDTO userUpdateDTO)
+    public async Task<IActionResult> Update(int id, [FromBody] UserUpdateDTO userUpdateDTO)
     {
         if (userUpdateDTO == null)
             return BadRequest(new { message = "User update data is required." });
@@ -92,7 +92,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("{id}/roles")]
-    public async Task<IActionResult> UpdateUserRoles(int id, [FromBody] UserRoleUpdateDTO roleUpdateDTO)
+    public async Task<IActionResult> UpdateRoles(int id, [FromBody] UserRoleUpdateDTO roleUpdateDTO)
     {
         if (roleUpdateDTO == null)
             return BadRequest(new { message = "Role update data is required." });
