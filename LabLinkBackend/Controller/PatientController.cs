@@ -19,10 +19,20 @@ public class PatientController : ControllerBase
     }
 
     [HttpPost("upsert")]
-    public async Task<IActionResult> Upsert(PatientUpsertDto dto)
+    public async Task<IActionResult> Upsert(PatientUpsertDto patientUpsertDto)
     {
-        var result = await _service.UpsertPatientAsync(dto);
+        var result = await _service.UpsertPatientAsync(patientUpsertDto);
 
-        return Ok(result);
+
+        var message = patientUpsertDto.IsCreate
+               ? "Patient created successfully."
+               : "Patient updated successfully.";
+
+        return Ok(new
+        {
+            message,
+            data = result
+        });
+
     }
 }

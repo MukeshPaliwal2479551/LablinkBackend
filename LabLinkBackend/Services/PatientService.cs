@@ -4,7 +4,6 @@ using LabLinkBackend.Repositories;
 
 namespace LabLinkBackend.Services;
 
-
 public class PatientService : IPatientService
 {
     private readonly IPatientRepository _repository;
@@ -14,16 +13,16 @@ public class PatientService : IPatientService
         _repository = repository;
     }
 
-    public async Task<PatientResponseDto> UpsertPatientAsync(PatientUpsertDto dto)
+    public async Task<PatientResponseDto> UpsertPatientAsync(PatientUpsertDto patientUpsertDto)
     {
-        bool isCreate = dto.IsCreate;
+        bool isCreate = patientUpsertDto.IsCreate;
 
         if (isCreate)
         {
             bool exists = await _repository.IsPatientExistAsync(
-                dto.Name,
-                dto.Dob,
-                dto.ContactInfo
+                patientUpsertDto.Name,
+                patientUpsertDto.Dob,
+                patientUpsertDto.ContactInfo
             );
 
             if (exists)
@@ -31,14 +30,14 @@ public class PatientService : IPatientService
 
             var patient = new Patient
             {
-                UserId = dto.UserId,
-                Name = dto.Name,
-                Dob = dto.Dob,
-                Gender = dto.Gender,
-                ContactInfo = dto.ContactInfo,
-                Address = dto.Address,
+                UserId = patientUpsertDto.UserId,
+                Name = patientUpsertDto.Name,
+                Dob = patientUpsertDto.Dob,
+                Gender = patientUpsertDto.Gender,
+                ContactInfo = patientUpsertDto.ContactInfo,
+                Address = patientUpsertDto.Address,
                 IsActive = true,
-                PrimaryPhysicianName = dto.PrimaryPhysicianName,
+                PrimaryPhysicianName = patientUpsertDto.PrimaryPhysicianName,
                 CreatedOn = DateTime.UtcNow
             };
 
@@ -46,18 +45,18 @@ public class PatientService : IPatientService
             return MapToResponse(created);
         }
 
-        var existing = await _repository.GetByIdAsync(dto.PatientId!.Value);
+        var existing = await _repository.GetByIdAsync(patientUpsertDto.PatientId!.Value);
 
         if (existing == null)
             throw new InvalidOperationException("Patient not found.");
 
-        existing.Name = dto.Name;
-        existing.Dob = dto.Dob;
-        existing.Gender = dto.Gender;
-        existing.ContactInfo = dto.ContactInfo;
-        existing.Address = dto.Address;
-        existing.IsActive = dto.IsActive;
-        existing.PrimaryPhysicianName = dto.PrimaryPhysicianName;
+        existing.Name = patientUpsertDto.Name;
+        existing.Dob = patientUpsertDto.Dob;
+        existing.Gender = patientUpsertDto.Gender;
+        existing.ContactInfo = patientUpsertDto.ContactInfo;
+        existing.Address = patientUpsertDto.Address;
+        existing.IsActive = patientUpsertDto.IsActive;
+        existing.PrimaryPhysicianName = patientUpsertDto.PrimaryPhysicianName;
 
         var updated = await _repository.UpdateAsync(existing);
         return MapToResponse(updated);

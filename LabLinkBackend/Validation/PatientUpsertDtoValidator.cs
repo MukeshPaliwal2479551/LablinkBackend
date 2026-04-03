@@ -25,7 +25,6 @@ public class PatientUpsertDtoValidator : AbstractValidator<PatientUpsertDto>
             .NotEmpty()
             .WithMessage("Contact information is required.");
 
-
         When(x => x.IsCreate, () =>
                 {
                     RuleFor(x => x.PatientId)
@@ -33,7 +32,6 @@ public class PatientUpsertDtoValidator : AbstractValidator<PatientUpsertDto>
                         .WithMessage("PatientId must NOT be provided when creating a patient.");
                 });
 
-    
         When(x => !x.IsCreate, () =>
         {
             RuleFor(x => x.PatientId)
@@ -41,10 +39,6 @@ public class PatientUpsertDtoValidator : AbstractValidator<PatientUpsertDto>
                 .GreaterThan(0)
                 .WithMessage("PatientId is required for update.");
         });
-
-
-
-
 
     }
 }
