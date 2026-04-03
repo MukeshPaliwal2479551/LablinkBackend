@@ -6,5 +6,6 @@ namespace LabLinkBackend.Controller;
 [Route("api/[controller]")]
 public class PatientController : ControllerBase
 {
+    
 }
 

@@ -15,7 +15,7 @@ namespace LabLinkBackend.Controllers
     {
         private readonly LabLinkDbContext _context;
         private readonly IConfiguration _configuration;
- 
+  
         public LoginController(LabLinkDbContext context, IConfiguration configuration)
         {
             _context = context;
@@ -50,7 +50,7 @@ namespace LabLinkBackend.Controllers
  
             var tokenString = GenerateJwtToken(user, roleNames);
  
-            return Ok(new 
+            return Ok(new
             {
                 token = tokenString,
                 userId = user.UserId,
@@ -62,24 +62,21 @@ namespace LabLinkBackend.Controllers
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email ?? string.Empty),
-                new Claim("userId", user.UserId.ToString()) 
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim("userId", user.UserId.ToString())
             };
-
+ 
             foreach (var role in roleNames)
             {
-                if (!string.IsNullOrEmpty(role)) 
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, role));
-                }
+                claims.Add(new Claim(ClaimTypes.Role, role));
             }
-
+ 
             var jwtKey = _configuration["Jwt:Key"]
                 ?? throw new InvalidOperationException("JWT Key not configured");
-
+ 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        
+ 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Issuer"],
