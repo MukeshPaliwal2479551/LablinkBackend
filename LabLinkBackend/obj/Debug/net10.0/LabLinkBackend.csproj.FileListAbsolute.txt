@@ -26,7 +26,6 @@ C:\Users\2479774\Desktop\Backend\LablinkBackend\LabLinkBackend\bin\Debug\net10.0
 C:\Users\2479774\Desktop\Backend\LablinkBackend\LabLinkBackend\bin\Debug\net10.0\Humanizer.dll
 C:\Users\2479774\Desktop\Backend\LablinkBackend\LabLinkBackend\bin\Debug\net10.0\JsonWebToken.dll
 C:\Users\2479774\Desktop\Backend\LablinkBackend\LabLinkBackend\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
-C:\Users\2479774\Desktop\Backend\LablinkBackend\LabLinkBackend\bin\Debug\net10.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\2479774\Desktop\Backend\LablinkBackend\LabLinkBackend\bin\Debug\net10.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\2479774\Desktop\Backend\LablinkBackend\LabLinkBackend\bin\Debug\net10.0\Microsoft.Bcl.Cryptography.dll
 C:\Users\2479774\Desktop\Backend\LablinkBackend\LabLinkBackend\bin\Debug\net10.0\Microsoft.Build.Framework.dll
