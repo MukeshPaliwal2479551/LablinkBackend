@@ -28,13 +28,13 @@ public class PanelRepository : IPanelRepository
     }
 
 
-    public async Task<Panel?> CreatePanelWithTestsAsync(CreatePanelDto dto, List<Test> tests)
+public async Task<Panel?> CreatePanelWithTestsAsync(PanelDto dto, List<Test> tests)
     {
         var panel = new Panel
         {
-            PanelCode = dto.PanelCode,
-            PanelName = dto.PanelName,
-            IsActive = dto.IsActive
+            PanelCode = dto.PanelCode!,
+            PanelName = dto.PanelName!,
+            IsActive = dto.IsActive ?? true
         };
 
         _context.Panels.Add(panel);

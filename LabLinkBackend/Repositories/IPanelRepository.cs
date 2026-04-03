@@ -10,7 +10,7 @@ public interface IPanelRepository
     Task<bool> IsPanelCodeExistsAsync(string panelCode);
     Task<List<Test>> GetActiveTestsByIdsAsync(List<int> testIds);
 
-    Task<Panel?> CreatePanelWithTestsAsync(CreatePanelDto dto, List<Test> tests);
+Task<Panel?> CreatePanelWithTestsAsync(PanelDto dto, List<Test> tests);
     
     // Update methods
     Task<Panel?> GetPanelByIdAsync(int panelId);

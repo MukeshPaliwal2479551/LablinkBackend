@@ -20,10 +20,10 @@ public class PanelService : IPanelService
     }
 
 
-    public async Task<(bool Success, PanelResultDto? Data, string? Error)> CreatePanelAsync(CreatePanelDto dto)
+public async Task<(bool Success, PanelResultDto? Data, string? Error)> CreatePanelAsync(PanelDto dto)
     {
         // Validate panel code unique
-        if (await _repository.IsPanelCodeExistsAsync(dto.PanelCode))
+        if (await _repository.IsPanelCodeExistsAsync(dto.PanelCode!))
         {
             return (false, null, "Panel code already exists");
         }
@@ -57,7 +57,7 @@ public class PanelService : IPanelService
         return (true, result, null);
     }
 
-    public async Task<(bool Success, PanelResultDto? Data, string? Error)> UpdatePanelAsync(UpdatePanelDto dto, int userId)
+    public async Task<(bool Success, PanelResultDto? Data, string? Error)> UpdatePanelAsync(PanelDto dto, int userId)
     {
         // Validate tests active
         var activeTests = await _repository.GetActiveTestsByIdsAsync(dto.TestIds);
@@ -67,7 +67,8 @@ public class PanelService : IPanelService
         }
 
         // Get existing panel
-        var panel = await _repository.GetPanelByIdAsync(dto.PanelId);
+        var panelId = dto.Id!.Value;
+        var panel = await _repository.GetPanelByIdAsync(panelId);
         if (panel == null)
         {
             return (false, null, "Panel not found.");

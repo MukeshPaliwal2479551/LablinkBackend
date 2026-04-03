@@ -2,10 +2,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LabLinkBackend.DTO;
 
-public class UpdatePanelDto
+public class PanelDto
 {
-    [Required(ErrorMessage = "Panel ID is required")]
-    public int PanelId { get; set; }
+    public int? Id { get; set; } = null;
+
+    public string? PanelCode { get; set; }
 
     [MaxLength(255, ErrorMessage = "Panel Name cannot exceed 255 characters")]
     public string? PanelName { get; set; }
@@ -15,4 +16,3 @@ public class UpdatePanelDto
 
     public bool? IsActive { get; set; }
 }
-
