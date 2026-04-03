@@ -84,9 +84,9 @@ public class UserService : IUserService
         };
     }
         
-    public async Task<bool> DeleteUser(int id)
+    public async Task<bool> Delete(int id)
     {
-        return await _userRepository.DeleteUser(id);
+        return await _userRepository.Delete(id);
     }
 
     public async Task<List<UserDto>> GetUsersAsync(string? name, string? phone)

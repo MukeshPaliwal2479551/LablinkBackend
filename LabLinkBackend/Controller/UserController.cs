@@ -6,7 +6,6 @@ namespace LabLinkBackend.Controller;
 
 [ApiController]
 [Route("api/[controller]")]
- [Authorize(Roles = "Admin")]   
 
 public class UserController : ControllerBase
 {
@@ -84,7 +83,7 @@ public class UserController : ControllerBase
     }
     [HttpDelete]
     [Route("delete/{id}")]
-    public async Task<IActionResult> DeleteUser(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         if (id <= 0)
         {
@@ -93,7 +92,7 @@ public class UserController : ControllerBase
                 Message = "Invalid user id. Id must be greater than zero."
             });
         }
-        var isDeleted = await _userService.DeleteUser(id);
+        var isDeleted = await _userService.Delete(id);
         if (!isDeleted)
         {
             return NotFound(new

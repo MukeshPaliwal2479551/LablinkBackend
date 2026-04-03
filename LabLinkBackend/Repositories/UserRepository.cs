@@ -45,7 +45,7 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<bool> DeleteUser(int id)
+    public async Task<bool> Delete(int id)
     {
         var user = await _labLinkDbContext.Users.FirstOrDefaultAsync(u => u.UserId == id);
         if (user == null)

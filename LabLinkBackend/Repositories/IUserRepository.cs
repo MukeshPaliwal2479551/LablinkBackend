@@ -10,7 +10,7 @@ public interface IUserRepository
     public Task<User?> GetById(int id);
     public Task<User> UpdateUser(User user);
 
-    Task<bool> DeleteUser(int id);
+    Task<bool> Delete(int id);
     Task<List<User>> GetUsersAsync(string? namePart, string? phonePart);
 }
 
