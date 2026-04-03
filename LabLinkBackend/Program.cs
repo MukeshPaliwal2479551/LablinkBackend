@@ -47,25 +47,53 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtIssuer,
         ValidAudience = jwtIssuer,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(jwtKey))
     };
 });
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IPatientRepository, PatientRepository>();
-builder.Services.AddScoped<IPatientService, PatientService>();
- 
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Enter ONLY the JWT token. Do NOT add 'Bearer ' prefix."
+    });
 
-builder.Services.AddDbContext<LabLinkDbContext>( 
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
+builder.Services.AddDbContext<LabLinkDbContext>(
+    options => options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"))
 );
- builder.Services.AddAuthorization();
+
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
-
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
+ 
+app.UseSwagger();
+app.UseSwaggerUI();
+ 
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
