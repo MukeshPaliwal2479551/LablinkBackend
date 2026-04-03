@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LabLinkBackend.Migrations
 {
     [DbContext(typeof(LabLinkDbContext))]
-    [Migration("20260403033354_p4")]
-    partial class p4
+    [Migration("20260331121601_SyncClientAccountType")]
+    partial class SyncClientAccountType
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

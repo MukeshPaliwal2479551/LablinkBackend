@@ -244,10 +244,8 @@ namespace LabLinkBackend.Migrations
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("Type")
-                        .HasMaxLength(1)
-                        .IsUnicode(false)
-                        .HasColumnType("char(1)")
-                        .IsFixedLength();
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("ClientId")
                         .HasName("PK__ClientAc__E67E1A245BD6D29B");

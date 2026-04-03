@@ -5,7 +5,7 @@
 namespace LabLinkBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class p4 : Migration
+    public partial class SyncClientAccountType : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
