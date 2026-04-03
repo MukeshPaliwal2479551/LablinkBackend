@@ -47,7 +47,6 @@ public class UserController : ControllerBase
             return StatusCode(500, new { message = "Failed to create user", detail = ex.Message });
         }
     }
-
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDTO userUpdateDTO)
     {
