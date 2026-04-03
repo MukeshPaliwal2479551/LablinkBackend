@@ -104,7 +104,7 @@ public partial class LabLinkDbContext : DbContext
 
             entity.ToTable("Accession");
 
-            entity.HasIndex(e => e.AccessionNumber, "UQ__Accessio__AE5A718E0F85B240").IsUnique();
+            entity.HasIndex(e =cd   > e.AccessionNumber, "UQ__Accessio__AE5A718E0F85B240").IsUnique();
 
             entity.Property(e => e.AccessionDate)
                 .HasDefaultValueSql("(getdate())")

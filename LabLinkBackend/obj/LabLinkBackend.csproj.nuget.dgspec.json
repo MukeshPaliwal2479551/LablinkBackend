@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj": {}
+    "C:\\Users\\2479774\\Desktop\\Backend\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj": {}
   },
   "projects": {
-    "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj": {
+    "C:\\Users\\2479774\\Desktop\\Backend\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
+        "projectUniqueName": "C:\\Users\\2479774\\Desktop\\Backend\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
         "projectName": "LabLinkBackend",
-        "projectPath": "C:\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
+        "projectPath": "C:\\Users\\2479774\\Desktop\\Backend\\LablinkBackend\\LabLinkBackend\\LabLinkBackend.csproj",
         "packagesPath": "C:\\Users\\2479774\\.nuget\\packages\\",
-        "outputPath": "C:\\LablinkBackend\\LabLinkBackend\\obj\\",
+        "outputPath": "C:\\Users\\2479774\\Desktop\\Backend\\LablinkBackend\\LabLinkBackend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\2479774\\AppData\\Roaming\\NuGet\\NuGet.Config"
