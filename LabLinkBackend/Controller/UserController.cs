@@ -1,8 +1,9 @@
-using LabLinkBackend.DTO;
-using LabLinkBackend.Services;
+using System.Runtime.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Collections.Generic;
+using LabLinkBackend.Services;
+using LabLinkBackend.DTO;
 
 namespace LabLinkBackend.Controller;
 
@@ -12,9 +13,11 @@ public class UserController : ControllerBase
 {
 
     IUserService _userService;
-    public UserController(IUserService userService)
+    private readonly IAuditLogService _auditLogService;
+    public UserController(IUserService userService, IAuditLogService auditLogService)
     {
         _userService = userService;
+        _auditLogService = auditLogService;
     }
 
     [HttpPost]
@@ -28,6 +31,15 @@ public class UserController : ControllerBase
         {
             var createdUser = await _userService.CreateUser(userRegisterDTO);
 
+            var auditDto = new AuditDto
+            {
+                UserId = createdUser.UserId,
+                Action = "User Registered",
+                Resource = "User",
+                Metadata = $"User {createdUser.Name} registered with email {createdUser.Email}"
+            };
+            await _auditLogService.CreateLogAsync(auditDto);
+
             var response = new
             {
                 createdUser.UserId,
@@ -39,7 +51,7 @@ public class UserController : ControllerBase
                 Roles = createdUser.UserRoles?.Select(ur => new
                 {
                     ur.RoleId,
-                    RoleName = ur.Role?.Role1
+                    RoleName = ur.Roles?.Role
                 }).ToList()
             };
 
@@ -107,7 +119,7 @@ public class UserController : ControllerBase
                 Roles = updatedUser.UserRoles?.Select(ur => new
                 {
                     ur.RoleId,
-                    RoleName = ur.Role?.Role1
+                    RoleName = ur.Roles?.Role
                 }).ToList()
             };
 

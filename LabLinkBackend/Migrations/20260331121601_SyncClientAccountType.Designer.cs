@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LabLinkBackend.Migrations
 {
     [DbContext(typeof(LabLinkDbContext))]
-    [Migration("20260331194129_phase1")]
-    partial class phase1
+    [Migration("20260331121601_SyncClientAccountType")]
+    partial class SyncClientAccountType
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -825,14 +825,18 @@ namespace LabLinkBackend.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PrimaryPhysicianName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PrimaryPhysicianUserId")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("PatientId")
                         .HasName("PK__Patient__970EC36608EDAFF3");
+
+                    b.HasIndex("PrimaryPhysicianUserId");
 
                     b.HasIndex(new[] { "UserId" }, "UQ__Patient__1788CC4D85CB9787")
                         .IsUnique();
@@ -1122,7 +1126,7 @@ namespace LabLinkBackend.Migrations
                     b.ToTable("ResultEntry", (string)null);
                 });
 
-            modelBuilder.Entity("LabLinkBackend.Models.Role", b =>
+            modelBuilder.Entity("LabLinkBackend.Models.Roles", b =>
                 {
                     b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
@@ -1130,7 +1134,7 @@ namespace LabLinkBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"));
 
-                    b.Property<string>("Role1")
+                    b.Property<string>("Role")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
@@ -1729,11 +1733,17 @@ namespace LabLinkBackend.Migrations
 
             modelBuilder.Entity("LabLinkBackend.Models.Patient", b =>
                 {
+                    b.HasOne("LabLinkBackend.Models.User", "PrimaryPhysician")
+                        .WithMany("PatientPrimaryPhysicians")
+                        .HasForeignKey("PrimaryPhysicianUserId");
+
                     b.HasOne("LabLinkBackend.Models.User", "User")
                         .WithOne("PatientUser")
                         .HasForeignKey("LabLinkBackend.Models.Patient", "UserId")
                         .IsRequired()
                         .HasConstraintName("FK_Patient_User");
+
+                    b.Navigation("PrimaryPhysician");
 
                     b.Navigation("User");
                 });
@@ -1935,7 +1945,7 @@ namespace LabLinkBackend.Migrations
 
             modelBuilder.Entity("LabLinkBackend.Models.UserRole", b =>
                 {
-                    b.HasOne("LabLinkBackend.Models.Role", "Role")
+                    b.HasOne("LabLinkBackend.Models.Roles", "Roles")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .IsRequired()
@@ -1947,7 +1957,7 @@ namespace LabLinkBackend.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_UserRole_User");
 
-                    b.Navigation("Role");
+                    b.Navigation("Roles");
 
                     b.Navigation("User");
                 });
@@ -2069,7 +2079,7 @@ namespace LabLinkBackend.Migrations
                     b.Navigation("TechValidations");
                 });
 
-            modelBuilder.Entity("LabLinkBackend.Models.Role", b =>
+            modelBuilder.Entity("LabLinkBackend.Models.Roles", b =>
                 {
                     b.Navigation("UserRoles");
                 });
@@ -2115,6 +2125,8 @@ namespace LabLinkBackend.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("PathologyReviews");
+
+                    b.Navigation("PatientPrimaryPhysicians");
 
                     b.Navigation("PatientUser");
 

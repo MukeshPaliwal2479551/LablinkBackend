@@ -4,6 +4,7 @@ using LabLinkBackend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LabLinkBackend.Migrations
 {
     [DbContext(typeof(LabLinkDbContext))]
-    partial class LabLinkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260329104125_phase1")]
+    partial class phase1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,8 +247,10 @@ namespace LabLinkBackend.Migrations
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("Type")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(1)
+                        .IsUnicode(false)
+                        .HasColumnType("char(1)")
+                        .IsFixedLength();
 
                     b.HasKey("ClientId")
                         .HasName("PK__ClientAc__E67E1A245BD6D29B");
@@ -820,18 +825,14 @@ namespace LabLinkBackend.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PrimaryPhysicianName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PrimaryPhysicianUserId")
-                        .HasColumnType("int");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("PatientId")
                         .HasName("PK__Patient__970EC36608EDAFF3");
-
-                    b.HasIndex("PrimaryPhysicianUserId");
 
                     b.HasIndex(new[] { "UserId" }, "UQ__Patient__1788CC4D85CB9787")
                         .IsUnique();
@@ -1121,7 +1122,7 @@ namespace LabLinkBackend.Migrations
                     b.ToTable("ResultEntry", (string)null);
                 });
 
-            modelBuilder.Entity("LabLinkBackend.Models.Roles", b =>
+            modelBuilder.Entity("LabLinkBackend.Models.Role", b =>
                 {
                     b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
@@ -1129,7 +1130,7 @@ namespace LabLinkBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"));
 
-                    b.Property<string>("Role")
+                    b.Property<string>("Role1")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
@@ -1498,7 +1499,6 @@ namespace LabLinkBackend.Migrations
                     b.HasOne("LabLinkBackend.Models.Patient", "Patient")
                         .WithMany("Appointments")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Appointment_Patient");
 
@@ -1729,10 +1729,6 @@ namespace LabLinkBackend.Migrations
 
             modelBuilder.Entity("LabLinkBackend.Models.Patient", b =>
                 {
-                    b.HasOne("LabLinkBackend.Models.User", "PrimaryPhysician")
-                        .WithMany("PatientPrimaryPhysicians")
-                        .HasForeignKey("PrimaryPhysicianUserId");
-
                     b.HasOne("LabLinkBackend.Models.User", "User")
                         .WithOne("PatientUser")
                         .HasForeignKey("LabLinkBackend.Models.Patient", "UserId")
@@ -1939,7 +1935,7 @@ namespace LabLinkBackend.Migrations
 
             modelBuilder.Entity("LabLinkBackend.Models.UserRole", b =>
                 {
-                    b.HasOne("LabLinkBackend.Models.Roles", "Roles")
+                    b.HasOne("LabLinkBackend.Models.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .IsRequired()
@@ -1951,7 +1947,7 @@ namespace LabLinkBackend.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_UserRole_User");
 
-                    b.Navigation("Roles");
+                    b.Navigation("Role");
 
                     b.Navigation("User");
                 });
@@ -2073,7 +2069,7 @@ namespace LabLinkBackend.Migrations
                     b.Navigation("TechValidations");
                 });
 
-            modelBuilder.Entity("LabLinkBackend.Models.Roles", b =>
+            modelBuilder.Entity("LabLinkBackend.Models.Role", b =>
                 {
                     b.Navigation("UserRoles");
                 });

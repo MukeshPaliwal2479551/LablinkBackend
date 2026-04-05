@@ -4,6 +4,7 @@ using LabLinkBackend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LabLinkBackend.Migrations
 {
     [DbContext(typeof(LabLinkDbContext))]
-    partial class LabLinkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260331140942_ChangeTypeToNvarchar")]
+    partial class ChangeTypeToNvarchar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1498,7 +1501,6 @@ namespace LabLinkBackend.Migrations
                     b.HasOne("LabLinkBackend.Models.Patient", "Patient")
                         .WithMany("Appointments")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Appointment_Patient");
 
@@ -1738,6 +1740,8 @@ namespace LabLinkBackend.Migrations
                         .HasForeignKey("LabLinkBackend.Models.Patient", "UserId")
                         .IsRequired()
                         .HasConstraintName("FK_Patient_User");
+
+                    b.Navigation("PrimaryPhysician");
 
                     b.Navigation("User");
                 });
@@ -2119,6 +2123,8 @@ namespace LabLinkBackend.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("PathologyReviews");
+
+                    b.Navigation("PatientPrimaryPhysicians");
 
                     b.Navigation("PatientUser");
 

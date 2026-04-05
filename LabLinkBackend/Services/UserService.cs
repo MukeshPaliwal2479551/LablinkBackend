@@ -2,6 +2,7 @@ using LabLinkBackend.Services;
 using LabLinkBackend.Data;
 using LabLinkBackend.Models;
 using LabLinkBackend.DTO;
+using LabLinkBackend.Repositories;
 
 namespace LabLinkBackend.Services;
 

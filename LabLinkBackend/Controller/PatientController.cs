@@ -11,5 +11,27 @@ namespace LabLinkBackend.Controller;
 [Route("api/patients")]
 public class PatientController : ControllerBase
 {
-    
+    private readonly IPatientService _service;
+
+    public PatientController(IPatientService service)
+    {
+        _service = service;
+    }
+
+    [HttpPost("upsert")]
+    public async Task<IActionResult> Upsert(PatientUpsertDto patientUpsertDto)
+    {
+        var result = await _service.UpsertPatientAsync(patientUpsertDto);
+
+        var message = patientUpsertDto.IsCreate
+               ? "Patient created successfully."
+               : "Patient updated successfully.";
+
+        return Ok(new
+        {
+            message,
+            data = result
+        });
+
+    }
 }
