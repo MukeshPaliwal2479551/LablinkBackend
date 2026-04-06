@@ -21,7 +21,7 @@ public class UserService : IUserService
     }
 
 
-    public async Task<List<UserDto>> GetUsersAsync(string? name, string? phone)
+    public async Task<List<UserDto>> GetUsersAsync(string name, string phone)
     {
         var users = await _userRepository.GetUsersAsync(name, phone);
         return users.Select(MapToDto).ToList();

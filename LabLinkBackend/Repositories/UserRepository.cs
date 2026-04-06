@@ -20,10 +20,8 @@ public class UserRepository : IUserRepository
         await _labLinkDbContext.SaveChangesAsync();
         return true;
         }
-    public async Task<List<User>> GetUsersAsync(string? name, string? phone)
+    public async Task<List<User>> GetUsersAsync(string name, string phone)
     {
-        name ??= string.Empty;
-        phone ??= string.Empty;
         var query = _labLinkDbContext.Users.AsQueryable();
         if (!string.IsNullOrWhiteSpace(name))
         {

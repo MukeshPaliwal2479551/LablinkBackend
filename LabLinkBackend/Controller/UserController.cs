@@ -34,11 +34,6 @@ public async Task<IActionResult> Delete(int id)
     }
 
     var userIdClaim = User.FindFirst("userId");
-    if (userIdClaim == null)
-    {
-        return Unauthorized(new { Message = "User not authenticated" });
-    }
-
     var auditDto = new AuditDto
     {
         UserId = int.Parse(userIdClaim.Value),   // ✅ actor
@@ -53,7 +48,7 @@ public async Task<IActionResult> Delete(int id)
     }
     [HttpGet]
     [Route("GetUser")]
-    public async Task<IActionResult> GetUsers(string? name, string? phone)
+    public async Task<IActionResult> GetUsers(string name="", string phone="")
     {
         var users = await _userService.GetUsersAsync(name, phone);
         if (users == null || !users.Any())
