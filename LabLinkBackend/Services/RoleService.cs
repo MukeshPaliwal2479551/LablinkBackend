@@ -1,5 +1,4 @@
 using LabLinkBackend.Models;
-using Role.DTO;
 using  LabLinkBackend.Data;
 namespace LabLinkBackend.Services;
 public class RoleService : IRoleService
@@ -11,15 +10,7 @@ public class RoleService : IRoleService
         _repository = repository;
     }
 
-    public async Task<Roles> CreateRoleAsync(RoleDto dto)
-    {
-        var role = new Roles
-        {
-            Role = dto.RoleName
-        };
-
-        return await _repository.CreateRoleAsync(role);
-    }
+    
 
     public async Task<IEnumerable<Roles>> GetAllRolesAsync()
     {

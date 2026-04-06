@@ -1,10 +1,8 @@
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
-using LabLinkBackend.Data;
+
 using LabLinkBackend.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace LabLinkBackend.Data;
+namespace LabLinkBackend.Repositories;
 
 public class UserRepository : IUserRepository
 {
@@ -13,38 +11,6 @@ public class UserRepository : IUserRepository
     {
         _labLinkDbContext = labLinkDbContext;
     }
-    async public Task<User> CreateUser(User user)
-    {
-        await _labLinkDbContext.Users.AddAsync(user);
-        await _labLinkDbContext.SaveChangesAsync();
-        return user;
-    }
-
-    async public Task<User?> GetByEmail(string email)
-    {
-        return await _labLinkDbContext.Users
-            .FirstOrDefaultAsync(u => u.Email == email);
-    }
-
-    async public Task<User?> GetByPhone(string phone)
-    {
-        return await _labLinkDbContext.Users
-            .FirstOrDefaultAsync(u => u.Phone == phone);
-    }
-
-    async public Task<User?> GetById(int id)
-    {
-        return await _labLinkDbContext.Users
-            .FirstOrDefaultAsync(u => u.UserId == id);
-    }
-
-    async public Task<User> UpdateUser(User user)
-    {
-        _labLinkDbContext.Users.Update(user);
-        await _labLinkDbContext.SaveChangesAsync();
-        return user;
-    }
-
     public async Task<bool> Delete(int id)
     {
         var user = await _labLinkDbContext.Users.FirstOrDefaultAsync(u => u.UserId == id);
@@ -55,7 +21,9 @@ public class UserRepository : IUserRepository
         return true;
         }
     public async Task<List<User>> GetUsersAsync(string? name, string? phone)
-        {
+    {
+        name ??= string.Empty;
+        phone ??= string.Empty;
         var query = _labLinkDbContext.Users.AsQueryable();
         if (!string.IsNullOrWhiteSpace(name))
         {
@@ -66,6 +34,6 @@ public class UserRepository : IUserRepository
             query = query.Where(u => u.Phone != null && u.Phone.Contains(phone));
         }
         return await query.ToListAsync();
-        }
+    }
 }
-    
+

@@ -1,109 +1,55 @@
 using LabLinkBackend.DTO;
 using LabLinkBackend.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
-namespace LabLinkBackend.Controller;
 
+namespace LabLinkBackend.Controller;
+ 
 [ApiController]
 [Route("api/[controller]")]
-
 public class UserController : ControllerBase
 {
-    IUserService _userService;
-    public UserController(IUserService userService)
+    private readonly IUserService _userService;
+    private readonly IAuditLogService _auditLogService;
+    public UserController(IUserService userService,IAuditLogService auditLogService)
     {
         _userService = userService;
+        _auditLogService=auditLogService;
     }
-    [HttpPost]
-    [Route("register")]
-    public async Task<IActionResult> CreateUser([FromBody] UserRegisterDTO userRegisterDTO)
+    [Authorize]
+[HttpDelete("delete/{id}")]
+public async Task<IActionResult> Delete(int id)
+{
+    if (id <= 0)
     {
-        if (userRegisterDTO == null)
-            return BadRequest(new { message = "User registration data is required." });
-
-        try
-        {
-            var createdUser = await _userService.CreateUser(userRegisterDTO);
-
-            var response = new
-            {
-                createdUser.UserId,
-                createdUser.Name,
-                createdUser.Email,
-                createdUser.Phone,
-                createdUser.IsActive,
-                createdUser.CreatedOn
-            };
-
-            return StatusCode(201, new {message= "user created", data= response});
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "Failed to create user", detail = ex.Message });
-        }
+        return BadRequest(new { Message = "Invalid user id." });
     }
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDTO userUpdateDTO)
+
+    var isDeleted = await _userService.Delete(id);
+    if (!isDeleted)
     {
-        if (userUpdateDTO == null)
-            return BadRequest(new { message = "User update data is required." });
-
-        try
-        {
-            var updatedUser = await _userService.UpdateUser(id, userUpdateDTO);
-
-            var response = new
-            {
-                updatedUser.UserId,
-                updatedUser.Name,
-                updatedUser.Email,
-                updatedUser.Phone,
-                updatedUser.IsActive,
-                updatedUser.UpdatedOn
-            };
-
-            return Ok(new { message = "User updated successfully", data = response });
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "Failed to update user", detail = ex.Message });
-        }
+        return NotFound(new { Message = "User not found" });
     }
-    [HttpDelete]
-    [Route("delete/{id}")]
-    public async Task<IActionResult> Delete(int id)
+
+    var userIdClaim = User.FindFirst("userId");
+    if (userIdClaim == null)
     {
-        if (id <= 0)
-        {
-            return BadRequest(new
-            {
-                Message = "Invalid user id. Id must be greater than zero."
-            });
-        }
-        var isDeleted = await _userService.Delete(id);
-        if (!isDeleted)
-        {
-            return NotFound(new
-            {
-                Message = "User not found"
-            });
-        }
-        return Ok(new
-        {
-            Message = "User deleted successfully"
-        });
+        return Unauthorized(new { Message = "User not authenticated" });
+    }
+
+    var auditDto = new AuditDto
+    {
+        UserId = int.Parse(userIdClaim.Value),   // ✅ actor
+        Action = "User Deleted",
+        Resource = "User",
+        Metadata = $"User with ID {id} was deleted"
+    };
+
+    await _auditLogService.CreateLogAsync(auditDto);
+
+    return Ok(new { Message = "User deleted successfully" });
     }
     [HttpGet]
     [Route("GetUser")]
@@ -120,4 +66,6 @@ public class UserController : ControllerBase
         return Ok(users);
     }
 }
-
+ 
+ 
+ 

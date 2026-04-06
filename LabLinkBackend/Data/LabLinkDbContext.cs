@@ -96,8 +96,7 @@ public partial class LabLinkDbContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
-        modelBuilder.Entity<Accession>(entity =>
+      modelBuilder.Entity<Accession>(entity =>
         {
             entity.HasKey(e => e.AccessionId).HasName("PK__Accessio__B4B2533D91A55B9E");
 
@@ -213,10 +212,7 @@ public partial class LabLinkDbContext : DbContext
             entity.Property(e => e.ContactInfo).HasMaxLength(255);
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.Name).HasMaxLength(150);
-            entity.Property(e => e.Type)
-                .HasMaxLength(1)
-                .IsUnicode(false)
-                .IsFixedLength();
+            entity.Property(e => e.Type).HasMaxLength(50);
         });
 
         modelBuilder.Entity<CompetencyLog>(entity =>

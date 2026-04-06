@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using LabLinkBackend.Services;
-using Role.DTO;
+
 
 [ApiController]
 [Route("api/[controller]")]
- [Authorize(Roles = "Admin")]   
+[Authorize(Roles = "Admin")]   
 public class RoleController : ControllerBase
 {
     private readonly IRoleService _service;
@@ -14,14 +14,6 @@ public class RoleController : ControllerBase
     {
         _service = service;
     }
-
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateRole(RoleDto dto)
-    {
-        var result = await _service.CreateRoleAsync(dto);
-        return Ok(result);
-    }
-
     [HttpGet]
     public async Task<IActionResult> GetRoles()
     {
