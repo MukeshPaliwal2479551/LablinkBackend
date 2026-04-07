@@ -2,11 +2,10 @@ using LabLinkBackend.Services;
 using LabLinkBackend.Data;
 using LabLinkBackend.Models;
 using LabLinkBackend.DTO;
-using  LabLinkBackend.Data;
+using LabLinkBackend.Data;
 using System.Security.Cryptography.X509Certificates;
 using LabLinkBackend.Repositories;
 namespace LabLinkBackend.Services;
-
 
 public class UserService : IUserService
 {
@@ -14,12 +13,11 @@ public class UserService : IUserService
     public UserService(IUserRepository userRepository)
     {
         _userRepository = userRepository;
-    } 
+    }
     public async Task<bool> Delete(int id)
     {
         return await _userRepository.Delete(id);
     }
-
 
     public async Task<List<UserDto>> GetUsersAsync(string name, string phone)
     {
@@ -38,6 +36,4 @@ public class UserService : IUserService
             IsActive = user.IsActive
         };
     }
- 
 }
- 

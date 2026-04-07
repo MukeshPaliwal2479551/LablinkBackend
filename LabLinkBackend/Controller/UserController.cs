@@ -9,6 +9,7 @@ namespace LabLinkBackend.Controller;
  
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -18,7 +19,6 @@ public class UserController : ControllerBase
         _userService = userService;
         _auditLogService=auditLogService;
     }
-    [Authorize]
 [HttpDelete("delete/{id}")]
 public async Task<IActionResult> Delete(int id)
 {
@@ -48,7 +48,7 @@ public async Task<IActionResult> Delete(int id)
     }
     [HttpGet]
     [Route("GetUser")]
-    public async Task<IActionResult> GetUsers(string name="", string phone="")
+    public async Task<IActionResult> GetUsers(string? name, string? phone)
     {
         var users = await _userService.GetUsersAsync(name, phone);
         if (users == null || !users.Any())
