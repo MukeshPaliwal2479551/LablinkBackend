@@ -27,6 +27,9 @@ builder.Services.AddFluentValidationAutoValidation();
  builder.Services.AddScoped<IPanelService, PanelService>();
  builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
  builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+ builder.Services.AddScoped<IAppointmentItemService, AppointmentItemService>();
+ builder.Services.AddScoped<IAppointmentItemRepository, AppointmentItemRepository>();
+
 
  builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured");

@@ -8,11 +8,13 @@ public partial class LabLinkDbContext : DbContext
 {
     public LabLinkDbContext()
     {
+        
     }
 
     public LabLinkDbContext(DbContextOptions<LabLinkDbContext> options)
         : base(options)
     {
+        
     }
 
     public virtual DbSet<Accession> Accessions { get; set; }
