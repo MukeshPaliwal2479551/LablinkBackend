@@ -8,8 +8,11 @@ using System.Threading.Tasks;
 
 namespace LabLinkBackend.Controller
 {
+    using Microsoft.AspNetCore.Authorization;
+
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Pathologist")]
     public class SpecimenController : ControllerBase
     {
         private readonly ISpecimenService _specimenService;
