@@ -5,7 +5,7 @@ using LabLinkBackend.Services;
 
 [ApiController]
 [Route("api/[controller]")]
- [Authorize(Roles = "Admin")]   
+[Authorize(Roles = "Admin")]   
 public class RoleController : ControllerBase
 {
     private readonly IRoleService _service;

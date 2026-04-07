@@ -18,7 +18,6 @@ obj/
 packages/
 
 .env
-appsettings.Development.json
 
 .vs/
 *.cache
