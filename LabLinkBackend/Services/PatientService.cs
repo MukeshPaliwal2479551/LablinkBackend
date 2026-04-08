@@ -42,7 +42,6 @@ public class PatientService : IPatientService
             };
 
             var created = await _repository.AddAsync(patient);
-
             return MapToResponse(created);
         }
 
@@ -60,7 +59,6 @@ public class PatientService : IPatientService
         existing.PrimaryPhysicianName = patientUpsertDto.PrimaryPhysicianName;
 
         var updated = await _repository.UpdateAsync(existing);
-
         return MapToResponse(updated);
     }
 

@@ -27,7 +27,8 @@ public class PanelRepository : IPanelRepository
             .ToListAsync();
     }
 
-public async Task<Panel?> CreatePanelWithTestsAsync(PanelDto dto, List<Test> tests)
+
+    public async Task<Panel?> CreatePanelWithTestsAsync(PanelDto dto, List<Test> tests)
     {
         var panel = new Panel
         {
@@ -67,6 +68,7 @@ public async Task<Panel?> CreatePanelWithTestsAsync(PanelDto dto, List<Test> tes
             .Where(pt => pt.PanelId == panelId)
             .ExecuteDeleteAsync();
     }
+
 
     public async Task AddPanelTestsAsync(int panelId, List<Test> tests)
     {
