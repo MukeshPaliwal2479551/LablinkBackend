@@ -33,7 +33,5 @@ public partial class Patient
 
     public virtual ICollection<LabOrder> LabOrders { get; set; } = new List<LabOrder>();
 
-    public virtual User? PrimaryPhysician { get; set; }
-
     public virtual User User { get; set; } = null!;
 }

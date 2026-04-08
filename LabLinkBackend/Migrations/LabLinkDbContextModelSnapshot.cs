@@ -820,18 +820,19 @@ namespace LabLinkBackend.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PrimaryPhysicianName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PrimaryPhysicianUserId")
-                        .HasColumnType("int");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId1")
                         .HasColumnType("int");
 
                     b.HasKey("PatientId")
                         .HasName("PK__Patient__970EC36608EDAFF3");
 
-                    b.HasIndex("PrimaryPhysicianUserId");
+                    b.HasIndex("UserId1");
 
                     b.HasIndex(new[] { "UserId" }, "UQ__Patient__1788CC4D85CB9787")
                         .IsUnique();
@@ -1728,17 +1729,15 @@ namespace LabLinkBackend.Migrations
 
             modelBuilder.Entity("LabLinkBackend.Models.Patient", b =>
                 {
-                    b.HasOne("LabLinkBackend.Models.User", "PrimaryPhysician")
-                        .WithMany("PatientPrimaryPhysicians")
-                        .HasForeignKey("PrimaryPhysicianUserId");
-
                     b.HasOne("LabLinkBackend.Models.User", "User")
                         .WithOne("PatientUser")
                         .HasForeignKey("LabLinkBackend.Models.Patient", "UserId")
                         .IsRequired()
                         .HasConstraintName("FK_Patient_User");
 
-                    b.Navigation("PrimaryPhysician");
+                    b.HasOne("LabLinkBackend.Models.User", null)
+                        .WithMany("PatientPrimaryPhysicians")
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("User");
                 });

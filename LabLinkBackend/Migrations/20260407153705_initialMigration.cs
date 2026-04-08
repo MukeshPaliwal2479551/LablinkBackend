@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LabLinkBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class phase1 : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,7 @@ namespace LabLinkBackend.Migrations
                     ClientId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    Type = table.Column<string>(type: "char(1)", unicode: false, fixedLength: true, maxLength: 1, nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     ContactInfo = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
@@ -338,22 +338,23 @@ namespace LabLinkBackend.Migrations
                     Gender = table.Column<string>(type: "char(1)", unicode: false, fixedLength: true, maxLength: 1, nullable: true),
                     ContactInfo = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PrimaryPhysicianId = table.Column<int>(type: "int", nullable: true),
+                    PrimaryPhysicianName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
-                    CreatedBy = table.Column<int>(type: "int", nullable: true)
+                    CreatedBy = table.Column<int>(type: "int", nullable: true),
+                    UserId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__Patient__970EC36608EDAFF3", x => x.PatientId);
                     table.ForeignKey(
-                        name: "FK_Patient_Physician",
-                        column: x => x.PrimaryPhysicianId,
+                        name: "FK_Patient_User",
+                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "UserId");
                     table.ForeignKey(
-                        name: "FK_Patient_User",
-                        column: x => x.UserId,
+                        name: "FK_Patient_User_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "User",
                         principalColumn: "UserId");
                 });
@@ -1104,9 +1105,9 @@ namespace LabLinkBackend.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Patient_PrimaryPhysicianId",
+                name: "IX_Patient_UserId1",
                 table: "Patient",
-                column: "PrimaryPhysicianId");
+                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "UQ__Patient__1788CC4D85CB9787",
