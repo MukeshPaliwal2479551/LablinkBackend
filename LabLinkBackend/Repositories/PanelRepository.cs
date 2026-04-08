@@ -28,7 +28,7 @@ public class PanelRepository : IPanelRepository
     }
 
 
-public async Task<Panel?> CreatePanelWithTestsAsync(PanelDto dto, List<Test> tests)
+    public async Task<Panel?> CreatePanelWithTestsAsync(PanelDto dto, List<Test> tests)
     {
         var panel = new Panel
         {
@@ -91,3 +91,4 @@ public async Task<Panel?> CreatePanelWithTestsAsync(PanelDto dto, List<Test> tes
     }
 
 }
+
