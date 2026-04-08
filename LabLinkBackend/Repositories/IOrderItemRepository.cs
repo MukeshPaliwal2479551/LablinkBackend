@@ -10,5 +10,4 @@ public interface IOrderItemRepository
     Task<List<OrderItem>> GetByOrderIdAsync(int orderId);
     Task DeleteAsync(OrderItem item);
     Task<bool> ExistsAsync(int orderId, int? testId, int? panelId);
-
 }

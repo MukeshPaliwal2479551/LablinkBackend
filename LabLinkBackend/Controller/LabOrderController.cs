@@ -29,7 +29,6 @@ public class LabOrderController : ControllerBase
         });
     }
 
-
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -65,7 +64,6 @@ public class LabOrderController : ControllerBase
             Data = result
         });
     }
-
 
     [HttpDelete("{orderId}")]
     public async Task<IActionResult> Delete(int orderId)

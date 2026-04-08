@@ -42,6 +42,4 @@ public class LabOrderRepository : ILabOrderRepository
         await _context.SaveChangesAsync();
     }
 
-
-
 }
