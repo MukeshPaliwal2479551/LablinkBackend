@@ -13,12 +13,11 @@ using LabLinkBackend.Repositories;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using LabLinkBackend.Validation;
-using LabLinkBackend.Services;
-using LabLinkBackend.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
  
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
  
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
@@ -29,6 +28,8 @@ builder.Services.AddScoped<IPanelRepository, PanelRepository>();
 builder.Services.AddScoped<IPanelService, PanelService>();
 builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+builder.Services.AddScoped<IPatientRepository,PatientRepository>();
+builder.Services.AddScoped<IPatientService,PatientService>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured");
