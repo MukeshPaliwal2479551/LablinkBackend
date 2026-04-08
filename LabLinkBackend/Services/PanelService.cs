@@ -66,7 +66,6 @@ public async Task<(bool Success, PanelResultDto? Data, string? Error)> CreatePan
             return (false, null, "One or more tests are inactive. Only active tests allowed.");
         }
 
-        // Get existing panel
         var panelId = dto.Id!.Value;
         var panel = await _repository.GetPanelByIdAsync(panelId);
         if (panel == null)
@@ -74,22 +73,15 @@ public async Task<(bool Success, PanelResultDto? Data, string? Error)> CreatePan
             return (false, null, "Panel not found.");
         }
 
-        // Update properties
         if (!string.IsNullOrEmpty(dto.PanelName))
             panel.PanelName = dto.PanelName;
         if (dto.IsActive.HasValue)
             panel.IsActive = dto.IsActive.Value;
 
-        // Sync tests - delete old, add new
         await _repository.DeletePanelTestsByPanelIdAsync(panel.PanelId);
         await _repository.AddPanelTestsAsync(panel.PanelId, activeTests);
-
-
-        // Save changes
         await _repository.UpdatePanelAsync(panel);
-
-
-        // Audit log
+  
         var auditDto = new AuditDto
         {
             UserId = userId,
@@ -99,7 +91,6 @@ public async Task<(bool Success, PanelResultDto? Data, string? Error)> CreatePan
         };
         await _auditLogService.CreateLogAsync(auditDto);
 
-        // Map result
         var result = new PanelResultDto
         {
             PanelId = panel.PanelId,
@@ -121,7 +112,7 @@ public async Task<(bool Success, PanelResultDto? Data, string? Error)> CreatePan
             PanelCode = p.PanelCode,
             PanelName = p.PanelName,
             IsActive = p.IsActive,
-            CreatedAt = DateTime.MinValue  // Model lacks CreatedAt; use placeholder for existing panels
+            CreatedAt = DateTime.MinValue  
         }).ToList();
     }
 
@@ -146,7 +137,7 @@ public async Task<(bool Success, PanelResultDto? Data, string? Error)> CreatePan
         panel.IsActive = false;
         await _repository.UpdatePanelAsync(panel);
 
-        // Audit log
+       
         var auditDto = new AuditDto
         {
             UserId = userId,
@@ -162,7 +153,7 @@ public async Task<(bool Success, PanelResultDto? Data, string? Error)> CreatePan
             PanelCode = panel.PanelCode,
             PanelName = panel.PanelName,
             IsActive = false,
-            CreatedAt = DateTime.MinValue  // Model lacks CreatedAt; use placeholder
+            CreatedAt = DateTime.MinValue  
         };
 
         return (true, result, null);
