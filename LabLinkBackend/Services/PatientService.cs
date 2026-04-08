@@ -7,12 +7,10 @@ namespace LabLinkBackend.Services;
 public class PatientService : IPatientService
 {
     private readonly IPatientRepository _repository;
-    private readonly IAuditLogService _auditLogService;
 
-    public PatientService(IPatientRepository repository, IAuditLogService auditLogService)
+    public PatientService(IPatientRepository repository)
     {
         _repository = repository;
-        _auditLogService = auditLogService;
     }
 
     public async Task<PatientResponseDto> UpsertPatientAsync(PatientUpsertDto patientUpsertDto)
@@ -45,15 +43,6 @@ public class PatientService : IPatientService
 
             var created = await _repository.AddAsync(patient);
 
-
-            await _auditLogService.CreateLogAsync(new AuditDto
-            {
-                UserId = patientUpsertDto.UserId,
-                Action = "CREATE",
-                Resource = "Patient",
-                Metadata = $"PatientId={created.PatientId}, Name={created.Name}"
-            });
-
             return MapToResponse(created);
         }
 
@@ -71,15 +60,6 @@ public class PatientService : IPatientService
         existing.PrimaryPhysicianName = patientUpsertDto.PrimaryPhysicianName;
 
         var updated = await _repository.UpdateAsync(existing);
-
-
-        await _auditLogService.CreateLogAsync(new AuditDto
-        {
-            UserId = patientUpsertDto.UserId,
-            Action = "UPDATE",
-            Resource = "Patient",
-            Metadata = $"PatientId={updated.PatientId}, Name={updated.Name}"
-        });
 
         return MapToResponse(updated);
     }

@@ -351,7 +351,6 @@ public partial class LabLinkDbContext : DbContext
                 .HasForeignKey(d => d.PatientId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_LabOrder_Patient");
-
         });
 
         modelBuilder.Entity<LabReport>(entity =>
