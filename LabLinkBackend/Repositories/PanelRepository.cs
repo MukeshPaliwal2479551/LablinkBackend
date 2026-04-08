@@ -90,5 +90,18 @@ public async Task<Panel?> CreatePanelWithTestsAsync(PanelDto dto, List<Test> tes
         await _context.SaveChangesAsync();
     }
 
+    public async Task<List<Panel>> GetAllPanelsAsync()
+    {
+        return await _context.Panels
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    public async Task<bool> HasActiveOrderReferencesAsync(int panelId)
+    {
+        return await _context.OrderItems
+            .Include(oi => oi.Order)
+            .AnyAsync(oi => oi.PanelId == panelId && oi.IsActive && oi.Order.IsActive);
+    }
 }
 

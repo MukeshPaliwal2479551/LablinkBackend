@@ -19,5 +19,6 @@ Task<Panel?> CreatePanelWithTestsAsync(PanelDto dto, List<Test> tests);
     Task AddPanelTestsAsync(int panelId, List<Test> tests);
     Task UpdatePanelAsync(Panel panel);
 
-
+    Task<List<Panel>> GetAllPanelsAsync();
+    Task<bool> HasActiveOrderReferencesAsync(int panelId);
 }

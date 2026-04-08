@@ -32,7 +32,7 @@ public class PanelController : ControllerBase
     [HttpPut("update")]
     public async Task<IActionResult> UpdatePanel([FromBody] PanelDto updatePanelInfo)
     {
-        var userIdClaim = User.FindFirst("userId")?.Value;
+        var userIdClaim = User.FindFirst("userId")?.Value;//we need this for audit trail check service layer
         if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int currentUserId))
         {
             return Unauthorized(new { message = "Invalid authentication context" });
@@ -44,5 +44,30 @@ public class PanelController : ControllerBase
         }
         return BadRequest(new { error = result.Error });
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllPanels()
+    {
+        var panels = await _panelService.GetAllPanelsAsync();
+        return Ok(panels);
+    }
+
+    [HttpPut("{id}/deactivate")]
+    public async Task<IActionResult> DeactivatePanel(int id)
+    {
+        var userIdClaim = User.FindFirst("userId")?.Value;
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int currentUserId))
+        {
+            return Unauthorized(new { message = "Invalid authentication context" });
+        }
+        var result = await _panelService.DeactivatePanelAsync(id, currentUserId);
+        if (result.Success)
+        {
+            return Ok(result.Data);
+        }
+        return BadRequest(new { error = result.Error });
+    }
 }
+
+
 

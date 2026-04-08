@@ -13,15 +13,15 @@ public class AuditLogService : LabLinkBackend.Services.IAuditLogService
         _repository = repository;
     }
 
-    public async Task<AuditLogResult> CreateLogAsync(AuditDto dto)
+    public async Task<AuditLogResult> CreateLogAsync(AuditDto auditInfo)
     {
         var audit = new AuditLog
         {
-            UserId = dto.UserId,
-            Action = dto.Action,
-            Resource = dto.Resource,
+            UserId = auditInfo.UserId,
+            Action = auditInfo.Action,
+            Resource = auditInfo.Resource,
             Timestamp = DateTime.UtcNow,
-            Metadata = dto.Metadata
+            Metadata = auditInfo.Metadata
         };
         return await _repository.AddAsync(audit);
     }

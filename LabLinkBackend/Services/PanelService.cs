@@ -111,5 +111,63 @@ public async Task<(bool Success, PanelResultDto? Data, string? Error)> CreatePan
 
         return (true, result, null);
     }
+
+    public async Task<List<PanelResultDto>> GetAllPanelsAsync()
+    {
+        var panels = await _repository.GetAllPanelsAsync();
+        return panels.Select(p => new PanelResultDto
+        {
+            PanelId = p.PanelId,
+            PanelCode = p.PanelCode,
+            PanelName = p.PanelName,
+            IsActive = p.IsActive,
+            CreatedAt = DateTime.MinValue  // Model lacks CreatedAt; use placeholder for existing panels
+        }).ToList();
+    }
+
+    public async Task<(bool Success, PanelResultDto? Data, string? Error)> DeactivatePanelAsync(int panelId, int userId)
+    {
+        if (await _repository.HasActiveOrderReferencesAsync(panelId))
+        {
+            return (false, null, "Cannot deactivate panel referenced by active orders.");
+        }
+
+        var panel = await _repository.GetPanelByIdAsync(panelId);
+        if (panel == null)
+        {
+            return (false, null, "Panel not found.");
+        }
+
+        if (!panel.IsActive)
+        {
+            return (false, null, "Panel is already deactivated.");
+        }
+
+        panel.IsActive = false;
+        await _repository.UpdatePanelAsync(panel);
+
+        // Audit log
+        var auditDto = new AuditDto
+        {
+            UserId = userId,
+            Action = "PanelDeactivated",
+            Resource = $"Panel/{panel.PanelId}",
+            Metadata = $"Panel: {panel.PanelName}"
+        };
+        await _auditLogService.CreateLogAsync(auditDto);
+
+        var result = new PanelResultDto
+        {
+            PanelId = panel.PanelId,
+            PanelCode = panel.PanelCode,
+            PanelName = panel.PanelName,
+            IsActive = false,
+            CreatedAt = DateTime.MinValue  // Model lacks CreatedAt; use placeholder
+        };
+
+        return (true, result, null);
+    }
 }
+
+
 

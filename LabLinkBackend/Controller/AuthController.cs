@@ -7,7 +7,8 @@ using System.Text;
 using LabLinkBackend.Models;
 using JsonWebToken.DTO;
  
-namespace LabLinkBackend.Controllers
+namespace LabLinkBackend.Controller
+
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -64,6 +65,7 @@ namespace LabLinkBackend.Controllers
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                 new Claim("userId", user.UserId.ToString())
             };
 
