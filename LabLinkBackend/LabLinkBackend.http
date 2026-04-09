@@ -2,8 +2,4 @@
 
 GET {{LabLinkBackend_HostAddress}}/weatherforecast/
 Accept: application/json
-
 ###
-
-
-

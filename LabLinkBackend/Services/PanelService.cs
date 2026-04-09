@@ -103,9 +103,9 @@ public async Task<(bool Success, PanelResultDto? Data, string? Error)> CreatePan
         return (true, result, null);
     }
 
-    public async Task<List<PanelResultDto>> GetAllPanelsAsync()
+    public async Task<List<PanelResultDto>> GetAllPanelsAsync(string? panelName = null, string? panelCode = null)
     {
-        var panels = await _repository.GetAllPanelsAsync();
+        var panels = await _repository.GetAllPanelsAsync(panelName, panelCode);
         return panels.Select(p => new PanelResultDto
         {
             PanelId = p.PanelId,

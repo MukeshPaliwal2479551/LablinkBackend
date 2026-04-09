@@ -32,11 +32,7 @@ public class PanelController : ControllerBase
     [HttpPut("update")]
     public async Task<IActionResult> UpdatePanel([FromBody] PanelDto updatePanelInfo)
     {
-        var userIdClaim = User.FindFirst("userId")?.Value;//we need this for audit trail check service layer
-        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int currentUserId))
-        {
-            return Unauthorized(new { message = "Invalid authentication context" });
-        }
+        int currentUserId = int.Parse(User.FindFirst("userId")?.Value);
         var result = await _panelService.UpdatePanelAsync(updatePanelInfo, currentUserId);
         if (result.Success)
         {
@@ -46,26 +42,23 @@ public class PanelController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllPanels()
+    public async Task<IActionResult> GetAllPanels([FromQuery] string? panelName = null, [FromQuery] string? panelCode = null)
     {
-        var panels = await _panelService.GetAllPanelsAsync();
+        var panels = await _panelService.GetAllPanelsAsync(panelName, panelCode);
         return Ok(panels);
     }
 
-    [HttpPut("{id}/deactivate")]
+    [HttpDelete("deactivate/{id}")]
     public async Task<IActionResult> DeactivatePanel(int id)
     {
-        var userIdClaim = User.FindFirst("userId")?.Value;
-        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int currentUserId))
-        {
-            return Unauthorized(new { message = "Invalid authentication context" });
-        }
+        int currentUserId = int.Parse(User.FindFirst("userId")?.Value);
+        
         var result = await _panelService.DeactivatePanelAsync(id, currentUserId);
-        if (result.Success)
-        {
-            return Ok(result.Data);
-        }
-        return BadRequest(new { error = result.Error });
+        
+        if (!result.Success)
+            return NotFound($"Panel with ID {id} not found.");
+            
+        return NoContent();
     }
 }
 
