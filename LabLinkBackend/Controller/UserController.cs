@@ -25,9 +25,7 @@ namespace LabLinkBackend.Controller;
         [AllowAnonymous]
         public async Task<IActionResult> Create(UserRegisterDTO userRegisterDTO)
         {
-            Console.WriteLine("===============================================");
-            Console.WriteLine("User Roles: " + string.Join(", ", User?.Claims?.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value) ?? Array.Empty<string>()));
-
+            
             if (userRegisterDTO == null)
                 return BadRequest(new { message = "User registration data is required." });
             
