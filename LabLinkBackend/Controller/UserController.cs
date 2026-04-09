@@ -4,16 +4,18 @@ using System.Linq;
 using System.Collections.Generic;
 using LabLinkBackend.Services;
 using LabLinkBackend.DTO;
-
+using Microsoft.AspNetCore.Authorization;
 namespace LabLinkBackend.Controller;
 
 [ApiController]
 [Route("api/[controller]")]
+
 public class UserController : ControllerBase
 {
 
     IUserService _userService;
     private readonly IAuditLogService _auditLogService;
+    
     public UserController(IUserService userService, IAuditLogService auditLogService)
     {
         _userService = userService;
@@ -75,7 +77,7 @@ public class UserController : ControllerBase
 
         try
         {
-            var updatedUser = await _userService.UpdateUser(id, userUpdateDTO);
+            var updatedUser = await _userService.UpdateUserAndRoles(id, userUpdateDTO);
 
             var response = new
             {
@@ -84,10 +86,15 @@ public class UserController : ControllerBase
                 updatedUser.Phone,
                 updatedUser.IsActive,
                 updatedUser.UpdatedOn,
-                updatedUser.Email
+                updatedUser.Email,
+                Roles = updatedUser.UserRoles?.Select(ur => new
+                {
+                    ur.RoleId,
+                    RoleName = ur.Roles?.Role
+                }).ToList()
             };
 
-            return Ok(new { message = "User updated successfully", data = response });
+            return Ok(new { message = "User and roles updated successfully", data = response });
         }
         catch (KeyNotFoundException ex)
         {
@@ -99,39 +106,7 @@ public class UserController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, new { message = "Failed to update user", detail = ex.Message });
-        }
-    }
-
-    [HttpPut("{id}/roles")]
-    public async Task<IActionResult> UpdateRoles(int id, [FromBody] UserRoleUpdateDTO roleUpdateDTO)
-    {
-        if (roleUpdateDTO == null)
-            return BadRequest(new { message = "Role update data is required." });
-
-        try
-        {
-            var updatedUser = await _userService.UpdateUserRoles(id, roleUpdateDTO.RoleIds);
-
-            var response = new
-            {
-                updatedUser.UserId,
-                Roles = updatedUser.UserRoles?.Select(ur => new
-                {
-                    ur.RoleId,
-                    RoleName = ur.Roles?.Role
-                }).ToList()
-            };
-
-            return Ok(new { message = "User roles updated successfully", data = response });
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "Failed to update user roles", detail = ex.Message });
+            return StatusCode(500, new { message = "Failed to update user and roles", detail = ex.Message });
         }
     }
 }

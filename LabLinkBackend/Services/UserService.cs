@@ -32,7 +32,7 @@ public class UserService : IUserService
             IsActive = true,
             CreatedOn = DateTime.UtcNow
         };
-
+        
         var createdUser = await _userRepository.CreateUser(user);
 
         // Create UserRole entries for each role
@@ -53,7 +53,7 @@ public class UserService : IUserService
         return userWithRoles ?? createdUser;
     }
 
-    public async Task<User> UpdateUser(int id, UserUpdateDTO userUpdateDTO)
+    public async Task<User> UpdateUserAndRoles(int id, UserUpdateDTO userUpdateDTO)
     {
         var existingUser = await _userRepository.GetById(id);
         if (existingUser == null)
@@ -69,31 +69,23 @@ public class UserService : IUserService
         }
         existingUser.UpdatedOn = DateTime.UtcNow;
 
-        return await _userRepository.UpdateUser(existingUser);
-    }
+        await _userRepository.UpdateUser(existingUser);
 
-    public async Task<User> UpdateUserRoles(int userId, List<int> roleIds)
-    {
-        var existingUser = await _userRepository.GetByIdWithRoles(userId);
-        if (existingUser == null)
-            throw new KeyNotFoundException("User not found.");
-
-        await _userRepository.DeleteUserRolesByUserId(userId);
-
-        if (roleIds != null && roleIds.Any())
+        // Update roles
+        await _userRepository.DeleteUserRolesByUserId(id);
+        if (userUpdateDTO.RoleIds != null && userUpdateDTO.RoleIds.Any())
         {
-            var newUserRoles = roleIds.Distinct().Select(roleId => new UserRole
+            var newUserRoles = userUpdateDTO.RoleIds.Distinct().Select(roleId => new UserRole
             {
-                UserId = userId,
+                UserId = id,
                 RoleId = roleId,
                 AssignedAt = DateTime.UtcNow,
                 IsActive = true
             }).ToList();
-
             await _userRepository.AddUserRoles(newUserRoles);
         }
 
-        var userWithUpdatedRoles = await _userRepository.GetByIdWithRoles(userId);
+        var userWithUpdatedRoles = await _userRepository.GetByIdWithRoles(id);
         return userWithUpdatedRoles ?? existingUser;
     }
 }
