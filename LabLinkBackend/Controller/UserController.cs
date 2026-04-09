@@ -7,62 +7,84 @@ using LabLinkBackend.DTO;
 using Microsoft.AspNetCore.Authorization;
 namespace LabLinkBackend.Controller;
 
-[ApiController]
-[Route("api/[controller]")]
-
-public class UserController : ControllerBase
-{
-
-    IUserService _userService;
-    private readonly IAuditLogService _auditLogService;
-    
-    public UserController(IUserService userService, IAuditLogService auditLogService)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class UserController : ControllerBase
     {
-        _userService = userService;
-        _auditLogService = auditLogService;
-    }
+        IUserService _userService;
+        private readonly IAuditLogService _auditLogService;
 
-    [HttpPost]
-    [Route("register")]
-    public async Task<IActionResult> Create(UserRegisterDTO userRegisterDTO)
-    {
-        if (userRegisterDTO == null)
-            return BadRequest(new { message = "User registration data is required." });
-
-        try
+        public UserController(IUserService userService, IAuditLogService auditLogService)
         {
-            var result = await _userService.CreateUser(userRegisterDTO);
-            var userId = (result as dynamic)?.data?.UserId;
-            var name = (result as dynamic)?.data?.Name;
-            var email = (result as dynamic)?.data?.Email;
-            if (userId != null && name != null && email != null)
+            _userService = userService;
+            _auditLogService = auditLogService;
+        }
+
+        [HttpPost]
+        [Route("register")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Create(UserRegisterDTO userRegisterDTO)
+        {
+            Console.WriteLine("===============================================");
+            Console.WriteLine("User Roles: " + string.Join(", ", User?.Claims?.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value) ?? Array.Empty<string>()));
+
+            if (userRegisterDTO == null)
+                return BadRequest(new { message = "User registration data is required." });
+            
+            // Only allow unauthenticated registration for patient role (roleId == 1)
+            var isPatientOnly = userRegisterDTO.RoleIds.Count == 1 && userRegisterDTO.RoleIds.Contains(1);
+            if (!isPatientOnly && (!(User?.Identity?.IsAuthenticated ?? false)))
             {
-                var auditDto = new AuditDto
-                {
-                    UserId = userId,
-                    Action = "User Registered",
-                    Resource = "User",
-                    Metadata = $"User {name} registered with email {email}"
-                };
-                await _auditLogService.CreateLogAsync(auditDto);
+                return StatusCode(403, new { message = "Only authenticated admins can register non-patient users." });
             }
-            return StatusCode(201, result);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "Failed to create user", detail = ex.Message });
-        }
-    }
 
-    [HttpPut("{id}")]
+            // If not patient, require admin role
+            if (!isPatientOnly && !(User?.IsInRole("Admin") ?? false))
+            {
+                return StatusCode(403, new { message = "Only admins can register non-patient users." });
+            }
+
+            try
+            {
+                var result = await _userService.CreateUser(userRegisterDTO);
+                var userId = (result as dynamic)?.data?.UserId;
+                var name = (result as dynamic)?.data?.Name;
+                var email = (result as dynamic)?.data?.Email;
+                if (userId != null && name != null && email != null)
+                {
+                    var auditDto = new AuditDto
+                    {
+                        UserId = userId,
+                        Action = "User Registered",
+                        Resource = "User",
+                        Metadata = $"User {name} registered with email {email}"
+                    };
+                    await _auditLogService.CreateLogAsync(auditDto);
+                }
+                return StatusCode(201, result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Failed to create user", detail = ex.Message });
+            }
+        }
+
+    [HttpPut]
+    [Route("update/{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UserUpdateDTO userUpdateDTO)
     {
         if (userUpdateDTO == null)
             return BadRequest(new { message = "User update data is required." });
+
+        // Only allow admin to update roles
+        if (userUpdateDTO.RoleIds != null && userUpdateDTO.RoleIds.Any() && !(User?.IsInRole("Admin") ?? false))
+        {
+            return StatusCode(403, new { message = "Only admins can update user roles." });
+        }
 
         try
         {
