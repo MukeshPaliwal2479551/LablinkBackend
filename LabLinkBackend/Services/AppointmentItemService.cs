@@ -35,7 +35,8 @@ namespace LabLinkBackend.Services
                     items.Add(appItem);
                 }
             }
-            else
+
+            if (appointmentItemDto.TestId.HasValue)
             {
                 // Create single item with TestId and PanelId as 1
                 var appItem = new AppointmentItem

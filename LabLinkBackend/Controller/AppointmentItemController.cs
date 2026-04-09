@@ -32,10 +32,6 @@ namespace LabLinkBackend.Controller
             {
                 return BadRequest(new {message= "panel or test is needed"});
             }
-            if(appointmentItemDto.PanelId != null && appointmentItemDto.TestId != null)
-            {
-                return BadRequest(new {message= "panel and test both not needed! request only one."});
-            }
 
             try
             {
@@ -48,7 +44,7 @@ namespace LabLinkBackend.Controller
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("update/{id}")]
         public async Task<IActionResult> Update(int id, AppointmentItemUpdateDto updateDto)
         {
             if (updateDto == null)
