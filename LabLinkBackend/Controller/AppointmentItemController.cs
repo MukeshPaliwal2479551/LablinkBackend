@@ -1,18 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Security;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using LabLinkBackend.DTO;
 using LabLinkBackend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 
 namespace LabLinkBackend.Controller
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Recep, Doctor")]
     public class AppointmentItemController : ControllerBase
     {
         private readonly IAppointmentItemService _appointmentItemService;

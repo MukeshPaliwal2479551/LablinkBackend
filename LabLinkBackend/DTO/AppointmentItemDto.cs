@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LabLinkBackend.DTO
 {
@@ -10,7 +6,6 @@ namespace LabLinkBackend.DTO
     {
         [Required]
         public int AppointmentId { get; set; }
-        
         public int? TestId { get; set; }
         public int? PanelId { get; set; }
 
