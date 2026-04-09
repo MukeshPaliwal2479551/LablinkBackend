@@ -31,33 +31,22 @@ public class UserController : ControllerBase
 
         try
         {
-            var createdUser = await _userService.CreateUser(userRegisterDTO);
-
-            var auditDto = new AuditDto
+            var result = await _userService.CreateUser(userRegisterDTO);
+            var userId = (result as dynamic)?.data?.UserId;
+            var name = (result as dynamic)?.data?.Name;
+            var email = (result as dynamic)?.data?.Email;
+            if (userId != null && name != null && email != null)
             {
-                UserId = createdUser.UserId,
-                Action = "User Registered",
-                Resource = "User",
-                Metadata = $"User {createdUser.Name} registered with email {createdUser.Email}"
-            };
-            await _auditLogService.CreateLogAsync(auditDto);
-
-            var response = new
-            {
-                createdUser.UserId,
-                createdUser.Name,
-                createdUser.Email,
-                createdUser.Phone,
-                createdUser.IsActive,
-                createdUser.CreatedOn,
-                Roles = createdUser.UserRoles?.Select(ur => new
+                var auditDto = new AuditDto
                 {
-                    ur.RoleId,
-                    RoleName = ur.Roles?.Role
-                }).ToList()
-            };
-
-            return StatusCode(201, new {message= "user created", data= response});
+                    UserId = userId,
+                    Action = "User Registered",
+                    Resource = "User",
+                    Metadata = $"User {name} registered with email {email}"
+                };
+                await _auditLogService.CreateLogAsync(auditDto);
+            }
+            return StatusCode(201, result);
         }
         catch (InvalidOperationException ex)
         {
@@ -77,24 +66,8 @@ public class UserController : ControllerBase
 
         try
         {
-            var updatedUser = await _userService.UpdateUserAndRoles(id, userUpdateDTO);
-
-            var response = new
-            {
-                updatedUser.UserId,
-                updatedUser.Name,
-                updatedUser.Phone,
-                updatedUser.IsActive,
-                updatedUser.UpdatedOn,
-                updatedUser.Email,
-                Roles = updatedUser.UserRoles?.Select(ur => new
-                {
-                    ur.RoleId,
-                    RoleName = ur.Roles?.Role
-                }).ToList()
-            };
-
-            return Ok(new { message = "User and roles updated successfully", data = response });
+            var result = await _userService.UpdateUserAndRoles(id, userUpdateDTO);
+            return Ok(result);
         }
         catch (KeyNotFoundException ex)
         {

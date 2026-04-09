@@ -6,6 +6,6 @@ namespace LabLinkBackend.Services;
 
 public interface IUserService
 {
-    public Task<User> CreateUser(UserRegisterDTO user);
-    public Task<User> UpdateUserAndRoles(int id, UserUpdateDTO user);
+    public Task<object> CreateUser(UserRegisterDTO user);
+    public Task<object> UpdateUserAndRoles(int id, UserUpdateDTO user);
 }

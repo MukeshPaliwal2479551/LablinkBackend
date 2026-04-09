@@ -14,17 +14,16 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
 
-    public async Task<User> CreateUser(UserRegisterDTO userRegisterDTO)
+    public async Task<object> CreateUser(UserRegisterDTO userRegisterDTO)
     {
-        
         var existingByEmail = await _userRepository.GetByEmail(userRegisterDTO.Email);
         if (existingByEmail != null)
             throw new InvalidOperationException("A user with this email already exists.");
-            
+
         var user = new User
         {
             Name = userRegisterDTO.Name.Trim(),
-            Email = string.IsNullOrWhiteSpace(userRegisterDTO.Email) ? 
+            Email = string.IsNullOrWhiteSpace(userRegisterDTO.Email) ?
                 throw new InvalidOperationException("Invalid Email") : userRegisterDTO.Email.Trim(),
             Phone = string.IsNullOrWhiteSpace(userRegisterDTO.Phone) ?
                 throw new InvalidOperationException("Invalid Phone number") : userRegisterDTO.Phone.Trim(),
@@ -32,7 +31,7 @@ public class UserService : IUserService
             IsActive = true,
             CreatedOn = DateTime.UtcNow
         };
-        
+
         var createdUser = await _userRepository.CreateUser(user);
 
         // Create UserRole entries for each role
@@ -50,10 +49,25 @@ public class UserService : IUserService
 
         // Fetch the user with roles
         var userWithRoles = await _userRepository.GetByIdWithRoles(createdUser.UserId);
-        return userWithRoles ?? createdUser;
+        var userResult = userWithRoles ?? createdUser;
+        return new {
+            message = "user created",
+            data = new {
+                userResult.UserId,
+                userResult.Name,
+                userResult.Email,
+                userResult.Phone,
+                userResult.IsActive,
+                userResult.CreatedOn,
+                Roles = userResult.UserRoles?.Select(ur => new {
+                    ur.RoleId,
+                    RoleName = ur.Roles?.Role
+                }).ToList()
+            }
+        };
     }
 
-    public async Task<User> UpdateUserAndRoles(int id, UserUpdateDTO userUpdateDTO)
+    public async Task<object> UpdateUserAndRoles(int id, UserUpdateDTO userUpdateDTO)
     {
         var existingUser = await _userRepository.GetById(id);
         if (existingUser == null)
@@ -86,7 +100,22 @@ public class UserService : IUserService
         }
 
         var userWithUpdatedRoles = await _userRepository.GetByIdWithRoles(id);
-        return userWithUpdatedRoles ?? existingUser;
+        var user = userWithUpdatedRoles ?? existingUser;
+        return new {
+            message = "User and roles updated successfully",
+            data = new {
+                user.UserId,
+                user.Name,
+                user.Phone,
+                user.IsActive,
+                user.UpdatedOn,
+                user.Email,
+                Roles = user.UserRoles?.Select(ur => new {
+                    ur.RoleId,
+                    RoleName = ur.Roles?.Role
+                }).ToList()
+            }
+        };
     }
 }
 
