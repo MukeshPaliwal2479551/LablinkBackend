@@ -45,6 +45,10 @@ public class OrderItemRepository : IOrderItemRepository
 
     public async Task<bool> ExistsAsync(int orderId, int? testId, int? panelId)
     {
+        if (!testId.HasValue == !panelId.HasValue)
+            throw new ArgumentException(
+                "Exactly one of testId or panelId is required.");
+
         return await _context.OrderItems.AnyAsync(i =>
             i.OrderId == orderId &&
             i.IsActive &&

@@ -1,7 +1,7 @@
 using LabLinkBackend.DTO;
 using LabLinkBackend.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LabLinkBackend.Controller;
 
@@ -18,62 +18,86 @@ public class OrderItemController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(OrderItemDto dto)
+    public async Task<IActionResult> Create([FromBody] OrderItemDto dto)
     {
+        if (dto == null)
+            return BadRequest(new { message = "Request body cannot be null." });
+
         var result = await _service.CreateAsync(dto);
 
-        return Ok(new ApiResponseDto<OrderItemResponseDto>
+        if (result == null)
+            return StatusCode(500, new
+            {
+                message = "Order item could not be created."
+            });
+
+        return Ok(new
         {
-            Message = "Order item created successfully",
-            Data = result
+            message = "Order item created successfully",
+            data = result
         });
     }
 
-    [HttpPut("{orderItemId}")]
-    public async Task<IActionResult> Update(int orderItemId, OrderItemDto dto)
+
+    [HttpPut("{orderItemId:int}")]
+    public async Task<IActionResult> Update(int orderItemId, [FromBody] OrderItemDto dto)
     {
+        if (dto == null)
+            return BadRequest(new { message = "Request body cannot be null." });
+
         var result = await _service.UpdateAsync(orderItemId, dto);
 
-        return Ok(new ApiResponseDto<OrderItemResponseDto>
+        if (result == null)
+            return NotFound(new
+            {
+                message = $"Order item with id {orderItemId} was not found."
+            });
+
+        return Ok(new
         {
-            Message = "Order item updated successfully",
-            Data = result
+            message = "Order item updated successfully",
+            data = result
         });
     }
 
-    [HttpGet("{orderItemId}")]
+    [HttpGet("{orderItemId:int}")]
     public async Task<IActionResult> Get(int orderItemId)
     {
         var result = await _service.GetByIdAsync(orderItemId);
 
-        return Ok(new ApiResponseDto<OrderItemResponseDto>
+        if (result == null)
+            return NotFound(new
+            {
+                message = $"Order item with id {orderItemId} was not found."
+            });
+
+        return Ok(new
         {
-            Message = "Order item retrieved successfully",
-            Data = result
+            message = "Order item retrieved successfully",
+            data = result
         });
     }
 
-    [HttpGet("order/{orderId}")]
+    [HttpGet("order/{orderId:int}")]
     public async Task<IActionResult> GetByOrder(int orderId)
     {
         var result = await _service.GetByOrderIdAsync(orderId);
 
-        return Ok(new ApiResponseDto<List<OrderItemResponseDto>>
+        return Ok(new
         {
-            Message = "Order items retrieved successfully",
-            Data = result
+            message = "Order items retrieved successfully",
+            data = result
         });
     }
 
-    [HttpDelete("{orderItemId}")]
+    [HttpDelete("{orderItemId:int}")]
     public async Task<IActionResult> Delete(int orderItemId)
     {
         await _service.DeleteAsync(orderItemId);
 
-        return Ok(new ApiResponseDto<object>
+        return Ok(new
         {
-            Message = "Order item deleted successfully",
-            Data = null
+            message = "Order item deleted successfully"
         });
     }
 }

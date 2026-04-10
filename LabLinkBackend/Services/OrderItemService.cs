@@ -21,7 +21,7 @@ public class OrderItemService : IOrderItemService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<OrderItemResponseDto> CreateAsync(OrderItemDto dto)
+    public async Task<OrderItemDto> CreateAsync(OrderItemDto dto)
     {
         try
         {
@@ -65,7 +65,7 @@ public class OrderItemService : IOrderItemService
         }
     }
 
-    public async Task<OrderItemResponseDto> UpdateAsync(int orderItemId, OrderItemDto dto)
+    public async Task<OrderItemDto> UpdateAsync(int orderItemId, OrderItemDto dto)
     {
         try
         {
@@ -98,7 +98,7 @@ public class OrderItemService : IOrderItemService
         }
     }
 
-    public async Task<OrderItemResponseDto> GetByIdAsync(int orderItemId)
+    public async Task<OrderItemDto> GetByIdAsync(int orderItemId)
     {
         try
         {
@@ -115,7 +115,7 @@ public class OrderItemService : IOrderItemService
         }
     }
 
-    public async Task<List<OrderItemResponseDto>> GetByOrderIdAsync(int orderId)
+    public async Task<List<OrderItemDto>> GetByOrderIdAsync(int orderId)
     {
         try
         {
@@ -156,7 +156,7 @@ public class OrderItemService : IOrderItemService
         }
     }
 
-    private static OrderItemResponseDto Map(OrderItem item) =>
+    private static OrderItemDto Map(OrderItem item) =>
         new()
         {
             OrderItemId = item.OrderItemId,

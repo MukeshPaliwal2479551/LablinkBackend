@@ -26,20 +26,49 @@ public class LabOrderRepository : ILabOrderRepository
 
     public async Task<LabOrder?> GetByIdAsync(int orderId)
     {
-        return await _context.LabOrders.FindAsync(orderId);
+        return await _context.LabOrders
+            .FirstOrDefaultAsync(o => o.OrderId == orderId && o.IsActive);
     }
 
     public async Task<List<LabOrder>> GetAllAsync()
     {
         return await _context.LabOrders
+            .Where(o => o.IsActive)
             .OrderByDescending(o => o.OrderDate)
             .ToListAsync();
     }
-    
+
     public async Task DeleteAsync(LabOrder order)
     {
         _context.LabOrders.Update(order);
         await _context.SaveChangesAsync();
     }
 
+    public async Task<List<LabOrder>> SearchAsync(
+        int? patientId,
+        DateTime? orderDate)
+    {
+        var query = _context.LabOrders
+            .Where(o => o.IsActive)
+            .AsQueryable();
+
+        if (patientId.HasValue)
+        {
+            query = query.Where(o => o.PatientId == patientId.Value);
+        }
+
+        if (orderDate.HasValue)
+        {
+            var start = orderDate.Value.Date;
+            var end = start.AddDays(1);
+
+            query = query.Where(o =>
+                o.OrderDate >= start &&
+                o.OrderDate < end);
+        }
+
+        return await query
+            .OrderByDescending(o => o.OrderDate)
+            .ToListAsync();
+    }
 }

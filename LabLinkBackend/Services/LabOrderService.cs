@@ -21,7 +21,7 @@ public class LabOrderService : ILabOrderService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<LabOrderResponseDto> CreateAsync(LabOrderDto dto)
+    public async Task<LabOrderDto> CreateAsync(LabOrderDto dto)
     {
         try
         {
@@ -53,7 +53,7 @@ public class LabOrderService : ILabOrderService
         }
     }
 
-    public async Task<LabOrderResponseDto> UpdateAsync(int orderId, LabOrderDto dto)
+    public async Task<LabOrderDto> UpdateAsync(int orderId, LabOrderDto dto)
     {
         try
         {
@@ -83,7 +83,7 @@ public class LabOrderService : ILabOrderService
         }
     }
 
-    public async Task<List<LabOrderResponseDto>> GetAllAsync()
+    public async Task<List<LabOrderDto>> GetAllAsync()
     {
         try
         {
@@ -97,7 +97,7 @@ public class LabOrderService : ILabOrderService
         }
     }
 
-    public async Task<LabOrderResponseDto> GetByIdAsync(int orderId)
+    public async Task<LabOrderDto> GetByIdAsync(int orderId)
     {
         try
         {
@@ -113,6 +113,22 @@ public class LabOrderService : ILabOrderService
         }
     }
 
+    public async Task<List<LabOrderDto>> SearchAsync(
+        int? patientId,
+        DateTime? orderDate)
+    {
+        try
+        {
+            var orders = await _repository.SearchAsync(patientId, orderDate);
+            return orders.Select(Map).ToList();
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException(
+                "An error occurred while searching LabOrders.", ex);
+        }
+    }
+
     public async Task DeleteAsync(int orderId)
     {
         try
@@ -123,7 +139,6 @@ public class LabOrderService : ILabOrderService
             order.IsActive = false;
             await _repository.DeleteAsync(order);
 
-        
             await _auditLogService.CreateLogAsync(new AuditDto
             {
                 UserId = GetCurrentUserId(),
@@ -138,14 +153,14 @@ public class LabOrderService : ILabOrderService
                 $"An error occurred while deleting LabOrder (OrderId={orderId}).", ex);
         }
     }
-
-    private static LabOrderResponseDto Map(LabOrder order) =>
+    private static LabOrderDto Map(LabOrder order) =>
         new()
         {
             OrderId = order.OrderId,
             PatientId = order.PatientId,
-            OrderDate = order.OrderDate ?? DateTime.UtcNow,
+            ClientId = order.ClientId,
             Priority = order.Priority,
+            OrderDate = order.OrderDate ?? DateTime.UtcNow,
             IsActive = order.IsActive
         };
 

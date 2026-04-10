@@ -1,7 +1,7 @@
 using LabLinkBackend.DTO;
 using LabLinkBackend.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LabLinkBackend.Controller;
 
@@ -18,14 +18,23 @@ public class LabOrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(LabOrderDto dto)
+    public async Task<IActionResult> Create([FromBody] LabOrderDto dto)
     {
+        if (dto == null)
+            return BadRequest(new { message = "Request body cannot be null." });
+
         var result = await _service.CreateAsync(dto);
 
-        return Ok(new ApiResponseDto<LabOrderResponseDto>
+        if (result == null)
+            return StatusCode(500, new
+            {
+                message = "Lab order could not be created."
+            });
+
+        return Ok(new
         {
-            Message = "Lab order created successfully",
-            Data = result
+            message = "Lab order created successfully",
+            data = result
         });
     }
 
@@ -34,47 +43,75 @@ public class LabOrderController : ControllerBase
     {
         var result = await _service.GetAllAsync();
 
-        return Ok(new ApiResponseDto<List<LabOrderResponseDto>>
+        return Ok(new
         {
-            Message = "Lab orders retrieved successfully",
-            Data = result
+            message = "Lab orders retrieved successfully",
+            data = result
         });
     }
 
-    [HttpPut("{orderId}")]
-    public async Task<IActionResult> Update(int orderId, LabOrderDto dto)
+    [HttpPost("search")]
+    public async Task<IActionResult> Search([FromBody] LabOrderDto dto)
     {
+        if (dto == null)
+            return BadRequest(new { message = "Request body cannot be null." });
+
+        var result = await _service.SearchAsync(dto.PatientId, dto.OrderDate);
+
+        return Ok(new
+        {
+            message = "Lab orders retrieved successfully",
+            data = result
+        });
+    }
+
+    [HttpPut("{orderId:int}")]
+    public async Task<IActionResult> Update(int orderId, [FromBody] LabOrderDto dto)
+    {
+        if (dto == null)
+            return BadRequest(new { message = "Request body cannot be null." });
+
         var result = await _service.UpdateAsync(orderId, dto);
 
-        return Ok(new ApiResponseDto<LabOrderResponseDto>
+        if (result == null)
+            return NotFound(new
+            {
+                message = $"Lab order with id {orderId} was not found."
+            });
+
+        return Ok(new
         {
-            Message = "Lab order updated successfully",
-            Data = result
+            message = "Lab order updated successfully",
+            data = result
         });
     }
 
-    [HttpGet("{orderId}")]
+    [HttpGet("{orderId:int}")]
     public async Task<IActionResult> Get(int orderId)
     {
         var result = await _service.GetByIdAsync(orderId);
 
-        return Ok(new ApiResponseDto<LabOrderResponseDto>
+        if (result == null)
+            return NotFound(new
+            {
+                message = $"Lab order with id {orderId} was not found."
+            });
+
+        return Ok(new
         {
-            Message = "Lab order retrieved successfully",
-            Data = result
+            message = "Lab order retrieved successfully",
+            data = result
         });
     }
 
-    [HttpDelete("{orderId}")]
+    [HttpDelete("{orderId:int}")]
     public async Task<IActionResult> Delete(int orderId)
     {
         await _service.DeleteAsync(orderId);
 
-        return Ok(new ApiResponseDto<object>
+        return Ok(new
         {
-            Message = "Lab order deleted successfully",
-            Data = null
+            message = "Lab order deleted successfully"
         });
     }
-
 }

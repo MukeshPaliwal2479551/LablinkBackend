@@ -4,9 +4,9 @@ namespace LabLinkBackend.Services;
 
 public interface IOrderItemService
 {
-    Task<OrderItemResponseDto> CreateAsync(OrderItemDto dto);
-    Task<OrderItemResponseDto> UpdateAsync(int orderItemId, OrderItemDto dto);
-    Task<OrderItemResponseDto> GetByIdAsync(int orderItemId);
-    Task<List<OrderItemResponseDto>> GetByOrderIdAsync(int orderId);
+    Task<OrderItemDto> CreateAsync(OrderItemDto dto);
+    Task<OrderItemDto> UpdateAsync(int orderItemId, OrderItemDto dto);
+    Task<OrderItemDto> GetByIdAsync(int orderItemId);
+    Task<List<OrderItemDto>> GetByOrderIdAsync(int orderId);
     Task DeleteAsync(int orderItemId);
 }
