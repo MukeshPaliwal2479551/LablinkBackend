@@ -65,7 +65,6 @@ namespace LabLinkBackend.Controller
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                 new Claim("userId", user.UserId.ToString())
             };
 
