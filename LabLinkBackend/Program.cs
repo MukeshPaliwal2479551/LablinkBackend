@@ -29,6 +29,8 @@ builder.Services.AddScoped<IPanelRepository, PanelRepository>();
 builder.Services.AddScoped<IPanelService, PanelService>();
 builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+builder.Services.AddScoped<ITestRepository,TestRepository>();
+builder.Services.AddScoped<ITestService,TestService>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured");
