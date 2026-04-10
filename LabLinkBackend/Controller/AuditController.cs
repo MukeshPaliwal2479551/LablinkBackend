@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 using LabLinkBackend.DTO;
 using LabLinkBackend.Services;
 
@@ -21,9 +20,6 @@ public class AuditController : ControllerBase
     [HttpPost]   
     public async Task<ActionResult<AuditLogResult>> CreateAudit([FromBody] AuditDto AuditInfo)
     {
-        var userIdString = User.FindFirst("userId")?.Value;
-        int.TryParse(userIdString, out int userId);
-        AuditInfo.UserId = userId;
         var res = await _auditLogService.CreateLogAsync(AuditInfo);
         return Ok(res);
     }
