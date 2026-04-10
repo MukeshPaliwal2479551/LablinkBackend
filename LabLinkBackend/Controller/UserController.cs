@@ -1,4 +1,5 @@
-using System.Runtime.Versioning;
+using LabLinkBackend.DTO;
+using LabLinkBackend.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace LabLinkBackend.Controller;
         [AllowAnonymous]
         public async Task<IActionResult> Create(UserRegisterDTO userRegisterDTO)
         {
+            Console.WriteLine("User Roles: " + string.Join(", ", User?.Claims?.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value) ?? Array.Empty<string>()));
             
             if (userRegisterDTO == null)
                 return BadRequest(new { message = "User registration data is required." });
@@ -71,35 +73,86 @@ namespace LabLinkBackend.Controller;
             }
         }
 
-    [HttpPut]
-    [Route("update/{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] UserUpdateDTO userUpdateDTO)
-    {
-        if (userUpdateDTO == null)
-            return BadRequest(new { message = "User update data is required." });
+        [HttpPut]
+        [Route("update/{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UserUpdateDTO userUpdateDTO)
+        {
+            if (userUpdateDTO == null)
+                return BadRequest(new { message = "User update data is required." });
 
-        // Only allow admin to update roles
-        if (userUpdateDTO.RoleIds != null && userUpdateDTO.RoleIds.Any() && !(User?.IsInRole("Admin") ?? false))
-        {
-            return StatusCode(403, new { message = "Only admins can update user roles." });
+            // Only allow admin to update roles
+            if (userUpdateDTO.RoleIds != null && userUpdateDTO.RoleIds.Any() && !(User?.IsInRole("Admin") ?? false))
+            {
+                return StatusCode(403, new { message = "Only admins can update user roles." });
+            }
+
+            try
+            {
+                var result = await _userService.UpdateUserAndRoles(id, userUpdateDTO);
+                return Ok(result);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Failed to update user and roles", detail = ex.Message });
+            }
         }
 
-        try
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var result = await _userService.UpdateUserAndRoles(id, userUpdateDTO);
-            return Ok(result);
+            if (id <= 0)
+            {
+                return BadRequest(new { Message = "Invalid user id." });
+            }
+
+            if (!(User?.IsInRole("Admin") ?? false))
+            {
+                return StatusCode(403, new { message = "Only admins can update user roles." });
+            }
+
+            var isDeleted = await _userService.Delete(id);
+            if (!isDeleted)
+            {
+                return NotFound(new { Message = "User not found" });
+            }
+
+            var userIdClaim = User.FindFirst("userId");
+            var auditDto = new AuditDto
+            {
+                UserId = int.Parse(userIdClaim.Value),   // ✅ actor
+                Action = "User Deleted",
+                Resource = "User",
+                Metadata = $"User with ID {id} was deleted"
+            };
+
+            await _auditLogService.CreateLogAsync(auditDto);
+
+            return Ok(new { Message = "User deleted successfully" });
+            }
+            [HttpGet]
+            [Route("GetUser")]
+            public async Task<IActionResult> GetUsers(string? name, string? phone)
+            {
+                var users = await _userService.GetUsersAsync(name, phone);
+                if (users == null || !users.Any())
+                {
+                    return NotFound(new
+                    {
+                        Message = "No users found"
+                    });
+                }
+                return Ok(users);
+            }
         }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = "Failed to update user and roles", detail = ex.Message });
-        }
-    }
-}
+ 
+ 
+ 

@@ -13,4 +13,6 @@ public interface IUserRepository
     public Task<User?> GetByIdWithRoles(int id);
     public Task DeleteUserRolesByUserId(int userId);
     public Task AddUserRoles(IEnumerable<UserRole> userRoles);
+    Task<bool> Delete(int id);
+    Task<List<User>> GetUsersAsync(string namePart, string phonePart);
 }

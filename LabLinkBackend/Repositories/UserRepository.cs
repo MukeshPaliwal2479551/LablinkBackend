@@ -68,5 +68,37 @@ public class UserRepository : IUserRepository
             .ThenInclude(ur => ur.Roles)
             .FirstOrDefaultAsync(u => u.UserId == id);
     }
+    public async Task<bool> Delete(int id)
+    {
+        var user = await _labLinkDbContext.Users.FirstOrDefaultAsync(u => u.UserId == id);
+        if (user == null)
+            return false;
+
+        // Soft delete: mark user and their roles as inactive
+        user.IsActive = false;
+        user.UpdatedOn = DateTime.UtcNow;
+
+        var userRoles = _labLinkDbContext.UserRoles.Where(ur => ur.UserId == id);
+        foreach (var role in userRoles)
+        {
+            role.IsActive = false;
+        }
+
+        await _labLinkDbContext.SaveChangesAsync();
+        return true;
+    }
+    public async Task<List<User>> GetUsersAsync(string name, string phone)
+    {
+        var query = _labLinkDbContext.Users.AsQueryable();
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            query = query.Where(u => u.Name.ToLower().Contains(name.ToLower()));
+        }
+        if (!string.IsNullOrWhiteSpace(phone))
+        {
+            query = query.Where(u => u.Phone != null && u.Phone.Contains(phone));
+        }
+        return await query.ToListAsync();
+    }
 }
 
