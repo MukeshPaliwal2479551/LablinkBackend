@@ -14,7 +14,6 @@ public partial class LabLinkDbContext : DbContext
         : base(options)
     {
     }
-
     public virtual DbSet<Accession> Accessions { get; set; }
 
     public virtual DbSet<Addendum> Addenda { get; set; }
