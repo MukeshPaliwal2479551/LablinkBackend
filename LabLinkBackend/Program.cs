@@ -17,6 +17,7 @@ using LabLinkBackend.Validation;
 var builder = WebApplication.CreateBuilder(args);
  
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
  
 builder.Services.AddFluentValidationAutoValidation();
  builder.Services.AddScoped<IAppointmentItemService, AppointmentItemService>();
@@ -30,6 +31,8 @@ builder.Services.AddScoped<IPanelRepository, PanelRepository>();
 builder.Services.AddScoped<IPanelService, PanelService>();
 builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+builder.Services.AddScoped<IPatientRepository,PatientRepository>();
+builder.Services.AddScoped<IPatientService,PatientService>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddHttpContextAccessor();
