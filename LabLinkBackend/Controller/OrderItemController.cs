@@ -39,7 +39,7 @@ public class OrderItemController : ControllerBase
     }
 
 
-    [HttpPut("{orderItemId:int}")]
+    [HttpPut("{orderItemId}")]
     public async Task<IActionResult> Update(int orderItemId, [FromBody] OrderItemDto dto)
     {
         if (dto == null)
@@ -60,7 +60,7 @@ public class OrderItemController : ControllerBase
         });
     }
 
-    [HttpGet("{orderItemId:int}")]
+    [HttpGet("{orderItemId}")]
     public async Task<IActionResult> Get(int orderItemId)
     {
         var result = await _service.GetByIdAsync(orderItemId);
@@ -78,7 +78,7 @@ public class OrderItemController : ControllerBase
         });
     }
 
-    [HttpGet("order/{orderId:int}")]
+    [HttpGet("order/{orderId}")]
     public async Task<IActionResult> GetByOrder(int orderId)
     {
         var result = await _service.GetByOrderIdAsync(orderId);
@@ -90,7 +90,7 @@ public class OrderItemController : ControllerBase
         });
     }
 
-    [HttpDelete("{orderItemId:int}")]
+    [HttpDelete("{orderItemId}")]
     public async Task<IActionResult> Delete(int orderItemId)
     {
         await _service.DeleteAsync(orderItemId);

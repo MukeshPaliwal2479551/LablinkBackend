@@ -65,7 +65,7 @@ public class LabOrderController : ControllerBase
         });
     }
 
-    [HttpPut("{orderId:int}")]
+    [HttpPut("{orderId}")]
     public async Task<IActionResult> Update(int orderId, [FromBody] LabOrderDto dto)
     {
         if (dto == null)
@@ -86,7 +86,7 @@ public class LabOrderController : ControllerBase
         });
     }
 
-    [HttpGet("{orderId:int}")]
+    [HttpGet("{orderId}")]
     public async Task<IActionResult> Get(int orderId)
     {
         var result = await _service.GetByIdAsync(orderId);
@@ -104,7 +104,7 @@ public class LabOrderController : ControllerBase
         });
     }
 
-    [HttpDelete("{orderId:int}")]
+    [HttpDelete("{orderId}")]
     public async Task<IActionResult> Delete(int orderId)
     {
         await _service.DeleteAsync(orderId);
