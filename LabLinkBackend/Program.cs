@@ -21,14 +21,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
  
 builder.Services.AddFluentValidationAutoValidation();
- builder.Services.AddScoped<IRoleRepository, RoleRepository>();
- builder.Services.AddScoped<IRoleService, RoleService>();
- builder.Services.AddScoped<IPanelRepository, PanelRepository>();
- builder.Services.AddScoped<IPanelService, PanelService>();
- builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
- builder.Services.AddScoped<IAuditLogService, AuditLogService>();
-builder.Services.AddScoped<IUserService, UserService>();
- builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddScoped<IUserService,UserService>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IPanelRepository, PanelRepository>();
+builder.Services.AddScoped<IPanelService, PanelService>();
+builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddHttpContextAccessor();
 
  builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
  
