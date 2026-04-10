@@ -33,7 +33,8 @@ builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
+ builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
+ 
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured");
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
  
