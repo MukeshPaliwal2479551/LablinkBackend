@@ -20,6 +20,9 @@ builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
  
 builder.Services.AddFluentValidationAutoValidation();
+ builder.Services.AddScoped<IAppointmentItemService, AppointmentItemService>();
+ builder.Services.AddScoped<IAppointmentItemRepository, AppointmentItemRepository>();
+
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
@@ -30,8 +33,12 @@ builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 builder.Services.AddScoped<IPatientRepository,PatientRepository>();
 builder.Services.AddScoped<IPatientService,PatientService>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
+ builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
+ 
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured");
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
  
