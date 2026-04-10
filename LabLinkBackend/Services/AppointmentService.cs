@@ -21,7 +21,7 @@ public class AppointmentService : IAppointmentService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<AppointmentResponseDto> CreateAsync(AppointmentCreateDto dto)
+    public async Task<AppointmentDto> CreateAsync(AppointmentDto dto)
     {
         var appointment = new Appointment
         {
@@ -43,10 +43,10 @@ public class AppointmentService : IAppointmentService
             Metadata = $"PatientId={created.PatientId}, Date={created.BookedDateTime:o}, Address={created.Address}"
         });
 
-        return MapToResponse(created);
+        return MapToDto(created);
     }
 
-    public async Task<AppointmentResponseDto> UpdateAsync(int appointmentId, AppointmentUpdateDto dto)
+    public async Task<AppointmentDto> UpdateAsync(int appointmentId, AppointmentDto dto)
     {
         var appointment = await _repository.GetByIdAsync(appointmentId)
             ?? throw new InvalidOperationException("Appointment not found.");
@@ -64,7 +64,7 @@ public class AppointmentService : IAppointmentService
             Metadata = $"PatientId={updated.PatientId}, Date={updated.BookedDateTime:o}, Address={updated.Address}"
         });
 
-        return MapToResponse(updated);
+        return MapToDto(updated);
     }
 
     public async Task<bool> DeleteAsync(int appointmentId)
@@ -84,20 +84,20 @@ public class AppointmentService : IAppointmentService
         return true;
     }
 
-    public async Task<AppointmentResponseDto> GetByIdAsync(int appointmentId)
+    public async Task<AppointmentDto> GetByIdAsync(int appointmentId)
     {
         var appointment = await _repository.GetByIdAsync(appointmentId)
             ?? throw new InvalidOperationException("Appointment not found.");
-        return MapToResponse(appointment);
+        return MapToDto(appointment);
     }
 
-    public async Task<List<AppointmentResponseDto>> GetByDateAsync(DateOnly? date)
+    public async Task<List<AppointmentDto>> GetByDateAsync(DateOnly? date)
     {
         var appointments = await _repository.GetByDateAsync(date);
-        return appointments.Select(MapToResponse).ToList();
+        return appointments.Select(MapToDto).ToList();
     }
 
-    private static AppointmentResponseDto MapToResponse(Appointment a) => new()
+    private static AppointmentDto MapToDto(Appointment a) => new()
     {
         AppointmentId = a.AppointmentId,
         PatientId = a.PatientId,

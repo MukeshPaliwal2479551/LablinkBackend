@@ -17,14 +17,14 @@ public class AppointmentController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(AppointmentCreateDto dto)
+    public async Task<IActionResult> Create(AppointmentDto dto)
     {
         var result = await _service.CreateAsync(dto);
         return Ok(new { message = "Appointment created successfully.", data = result });
     }
 
     [HttpPut("{appointmentId}")]
-    public async Task<IActionResult> Update(int appointmentId, AppointmentUpdateDto dto)
+    public async Task<IActionResult> Update(int appointmentId, AppointmentDto dto)
     {
         var result = await _service.UpdateAsync(appointmentId, dto);
         return Ok(new { message = "Appointment updated successfully.", data = result });
