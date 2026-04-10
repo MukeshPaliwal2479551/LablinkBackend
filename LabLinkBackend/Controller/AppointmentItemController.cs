@@ -7,7 +7,7 @@ namespace LabLinkBackend.Controller
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Recep, Doctor")]
+    [Authorize(Roles = "Reception, Phlebotomist")]
     public class AppointmentItemController : ControllerBase
     {
         private readonly IAppointmentItemService _appointmentItemService;
