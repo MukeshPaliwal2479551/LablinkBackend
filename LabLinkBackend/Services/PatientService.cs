@@ -7,11 +7,20 @@ namespace LabLinkBackend.Services;
 public class PatientService : IPatientService
 {
     private readonly IPatientRepository _repository;
+    private readonly IAuditLogService _auditLogService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public PatientService(IPatientRepository repository)
+
+    public PatientService(
+            IPatientRepository repository,
+            IAuditLogService auditLogService,
+            IHttpContextAccessor httpContextAccessor)
     {
         _repository = repository;
+        _auditLogService = auditLogService;
+        _httpContextAccessor = httpContextAccessor;
     }
+
 
     public async Task<PatientResponseDto> UpsertPatientAsync(PatientUpsertDto patientUpsertDto)
     {
@@ -42,6 +51,16 @@ public class PatientService : IPatientService
             };
 
             var created = await _repository.AddAsync(patient);
+
+            await _auditLogService.CreateLogAsync(new AuditDto
+            {
+                UserId = GetCurrentUserId(),
+                Action = "CREATE",
+                Resource = "Patient",
+                Metadata =
+                    $"PatientId={created.PatientId}, Name={created.Name}, Dob={created.Dob:yyyy-MM-dd}"
+            });
+
             return MapToResponse(created);
         }
 
@@ -59,6 +78,17 @@ public class PatientService : IPatientService
         existing.PrimaryPhysicianName = patientUpsertDto.PrimaryPhysicianName;
 
         var updated = await _repository.UpdateAsync(existing);
+
+
+        await _auditLogService.CreateLogAsync(new AuditDto
+        {
+            UserId = GetCurrentUserId(),
+            Action = "UPDATE",
+            Resource = "Patient",
+            Metadata =
+                        $"PatientId={updated.PatientId}, IsActive={updated.IsActive}"
+        });
+
         return MapToResponse(updated);
     }
 
@@ -77,4 +107,16 @@ public class PatientService : IPatientService
             PrimaryPhysicianName = patient.PrimaryPhysicianName
         };
     }
+
+
+    private int GetCurrentUserId()
+    {
+        var claimValue = _httpContextAccessor.HttpContext?
+            .User?
+            .FindFirst("userId")?
+            .Value;
+
+        return int.TryParse(claimValue, out var userId) ? userId : 0;
+    }
+
 }
