@@ -38,6 +38,8 @@ builder.Services.AddScoped<IAppointmentItemService, AppointmentItemService>();
 builder.Services.AddScoped<IAppointmentItemRepository, AppointmentItemRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IAccessionRepository,AccessionRepository>();
+builder.Services.AddScoped<IAccessionService,AccessionService>();
 
 
 
