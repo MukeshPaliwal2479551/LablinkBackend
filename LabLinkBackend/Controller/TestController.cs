@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using LabLinkBackend.DTO;
 using LabLinkBackend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LabLinkBackend.Controller
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Pathologist")]
     public class TestController : ControllerBase
     {
         private readonly ITestService testService;
@@ -18,7 +20,7 @@ namespace LabLinkBackend.Controller
             testService=_testService;
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CreateTestDto dto)
+        public async Task<IActionResult> Create(TestDto dto)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
             try
@@ -49,7 +51,7 @@ namespace LabLinkBackend.Controller
             }
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id,UpdateTestDto dto)
+        public async Task<IActionResult> Update(int id, TestDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 

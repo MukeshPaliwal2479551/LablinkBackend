@@ -9,10 +9,10 @@ namespace LabLinkBackend.Services
 {
     public interface ITestService
     {
-        Task Create(CreateTestDto dto);
+        Task Create(TestDto dto);
         Task<IEnumerable<Test>> GetTests(string?Name, string?Code);
         Task<Test?> GetById(int id);
-        Task Update(int id,UpdateTestDto dto);
+        Task Update(int id, TestDto dto);
         Task Deactivate(int id);
     }
 }

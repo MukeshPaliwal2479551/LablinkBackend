@@ -20,7 +20,7 @@ namespace LabLinkBackend.Services
             auditLogService = _auditLogService;
             httpContextAccessor = _httpContextAccessor;
         }
-        public async Task Create(CreateTestDto dto)
+        public async Task Create(TestDto dto)
         {
             var existing = await testRepository.GetByCodeAsync(dto.Code);
             if (existing != null)
@@ -32,11 +32,10 @@ namespace LabLinkBackend.Services
                 Code = dto.Code,
                 Name = dto.Name,
                 DepartmentId = dto.DepartmentId,
-                MethodId = dto.MethodId,
                 SpecimenTypeId = dto.SpecimenTypeId,
                 ContainerTypeId = dto.ContainerTypeId,
                 Units = dto.Units,
-                RefRangeJson = dto.RefRange,
+                RefRangeJson = dto.RefRangeJson,
                 IsActive = dto.IsActive,
                 VolumeReq = dto.VolumeReq,
                 MaxNormalValue = dto.MaxNormalValue,
@@ -45,17 +44,9 @@ namespace LabLinkBackend.Services
             };
             await testRepository.Create(entity);
 
-            // Audit log (get userId from claims)
-            int userId = 0;
-            var user = httpContextAccessor.HttpContext?.User;
-            var userIdClaim = user?.FindFirst("userId");
-            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out var parsedId))
+            var auditDto = new AuditDto
             {
-                userId = parsedId;
-            }
-            var auditDto = new LabLinkBackend.DTO.AuditDto
-            {
-                UserId = userId,
+                UserId = GetCurrentUserId(),
                 Action = "Create Test",
                 Resource = $"TestId:{entity.TestId}",
                 Metadata = $"Test '{entity.Name}' created."
@@ -71,7 +62,6 @@ namespace LabLinkBackend.Services
                 throw new KeyNotFoundException("Test not found");
             }
 
-            // Prevent deactivation if test is in use
             if (await testRepository.IsTestLinkedToAnyPanelAsync(id))
             {
                 throw new InvalidOperationException("Cannot deactivate: Test is linked to a panel.");
@@ -83,10 +73,9 @@ namespace LabLinkBackend.Services
 
             await testRepository.Deactive(test);
 
-            // Audit log
-            var auditDto = new LabLinkBackend.DTO.AuditDto
+            var auditDto = new AuditDto
             {
-                UserId = 0, // Set this to the actual user id if available
+                UserId = GetCurrentUserId(),
                 Action = "Deactivate Test",
                 Resource = $"TestId:{id}",
                 Metadata = $"Test '{test.Name}' deactivated."
@@ -101,15 +90,17 @@ namespace LabLinkBackend.Services
 
         public async Task<IEnumerable<Test>> GetTests(string? Name, string? Code)
         {
-            return await testRepository.GetTests(Name,Code);
+            return await testRepository.GetTests(Name, Code);
         }
 
-        public async Task Update(int id, UpdateTestDto dto)
+        public async Task Update(int id, TestDto dto)
         {
             var test = await testRepository.GetById(id);
             if (test == null) throw new KeyNotFoundException("Test not found");
 
-            test.MethodId = dto.MethodId;
+            test.Code = dto.Code;
+            test.Name = dto.Name;
+            test.DepartmentId = dto.DepartmentId;
             test.SpecimenTypeId = dto.SpecimenTypeId;
             test.ContainerTypeId = dto.ContainerTypeId;
             test.VolumeReq = dto.VolumeReq;
@@ -120,6 +111,23 @@ namespace LabLinkBackend.Services
             test.RefRangeJson = dto.RefRangeJson;
             test.IsActive = dto.IsActive;
             await testRepository.Update(test);
+
+            var auditDto = new AuditDto
+            {
+                UserId = GetCurrentUserId(),
+                Action = "Update Test",
+                Resource = $"TestId:{id}",
+                Metadata = $"TestId={id} updated."
+            };
+            await auditLogService.CreateLogAsync(auditDto);
+        }
+        private int GetCurrentUserId()
+        {
+            var claimValue = httpContextAccessor.HttpContext?
+                .User?
+                .FindFirst("userId")?
+                .Value;
+            return int.TryParse(claimValue, out var userId) ? userId : 0;
         }
     }
 }
