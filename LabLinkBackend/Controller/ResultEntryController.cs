@@ -17,11 +17,7 @@ public class ResultEntryController : ControllerBase
         _service = service;
     }
 
-    /// <summary>
-    /// POST /api/results
-    /// Manually enter a new result. Status is set to "Draft" server-side.
-    /// EnteredBy is resolved from the JWT token.
-    /// </summary>
+   
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] ResultEntryCreateDto dto)
     {
@@ -40,10 +36,7 @@ public class ResultEntryController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// GET /api/results/order/{orderItemId}
-    /// Retrieve all results for a specific order item.
-    /// </summary>
+    
     [HttpGet("order/{orderItemId:int}")]
     public async Task<IActionResult> GetByOrderItemId(int orderItemId)
     {
@@ -58,10 +51,7 @@ public class ResultEntryController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// PUT /api/results/{id}
-    /// Update an existing result entry.
-    /// </summary>
+    
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] ResultEntryCreateDto dto)
     {
