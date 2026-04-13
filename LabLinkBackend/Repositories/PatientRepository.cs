@@ -1,4 +1,3 @@
-
 using LabLinkBackend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,10 +12,38 @@ public class PatientRepository : IPatientRepository
         _context = context;
     }
 
-    public async Task<Patient?> GetByIdAsync(int patientId) =>
-        await _context.Patients.FindAsync(patientId);
+    public async Task<Patient?> GetByIdAsync(int patientId)
+    {
+        return await _context.Patients
+            .FirstOrDefaultAsync(p => p.PatientId == patientId);
+    }
 
-    public async Task<bool> IsPatientExistAsync(string name,DateOnly dob,string phone)
+    public async Task<List<Patient>> GetAsync(string? name, string? phone)
+    {
+        var query = _context.Patients.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            query = query.Where(p =>
+                p.Name.ToLower().Contains(name.ToLower()));
+        }
+
+        if (!string.IsNullOrWhiteSpace(phone))
+        {
+            query = query.Where(p =>
+                p.ContactInfo != null &&
+                p.ContactInfo.Contains(phone));
+        }
+
+        return await query
+            .OrderBy(p => p.Name)
+            .ToListAsync();
+    }
+
+    public async Task<bool> IsPatientExistAsync(
+        string name,
+        DateOnly dob,
+        string phone)
     {
         return await _context.Patients.AnyAsync(p =>
             p.Name.ToLower() == name.ToLower() &&
@@ -37,5 +64,11 @@ public class PatientRepository : IPatientRepository
         _context.Patients.Update(patient);
         await _context.SaveChangesAsync();
         return patient;
+    }
+
+    public async Task DeleteAsync(Patient patient)
+    {
+        _context.Patients.Remove(patient);
+        await _context.SaveChangesAsync();
     }
 }
