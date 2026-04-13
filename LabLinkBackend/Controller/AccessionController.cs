@@ -8,7 +8,7 @@ namespace LabLinkBackend.Controller;
 
 [ApiController]
 [Route("api/accessions")]
-[Authorize(Roles = "Receptionist,Admin")]
+[Authorize(Roles = "Receptionist,Admin,LabTechnician")]
 public class AccessionController : ControllerBase
 {
     private readonly IAccessionService _service;
