@@ -15,24 +15,27 @@ using FluentValidation;
 using LabLinkBackend.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
- 
+
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
- 
-builder.Services.AddFluentValidationAutoValidation();
- builder.Services.AddScoped<IAppointmentItemService, AppointmentItemService>();
- builder.Services.AddScoped<IAppointmentItemRepository, AppointmentItemRepository>();
 
+builder.Services.AddFluentValidationAutoValidation();
+ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+ builder.Services.AddScoped<IRoleService, RoleService>();
+ builder.Services.AddScoped<IPanelRepository, PanelRepository>();
+ builder.Services.AddScoped<IPanelService, PanelService>();
+ builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+builder.Services.AddScoped<ILabOrderService, LabOrderService>();
+builder.Services.AddScoped<ILabOrderRepository, LabOrderRepository>();
+builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IOrderItemService, OrderItemService>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<IUserService,UserService>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<IPanelRepository, PanelRepository>();
-builder.Services.AddScoped<IPanelService, PanelService>();
-builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
-builder.Services.AddScoped<IAuditLogService, AuditLogService>();
-builder.Services.AddScoped<IPatientRepository,PatientRepository>();
-builder.Services.AddScoped<IPatientService,PatientService>();
+builder.Services.AddScoped<IAppointmentItemService, AppointmentItemService>();
+builder.Services.AddScoped<IAppointmentItemRepository, AppointmentItemRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IResultEntryRepository, ResultEntryRepository>();
