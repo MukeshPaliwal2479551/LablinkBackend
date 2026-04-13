@@ -49,8 +49,6 @@ public class LabOrderController : ControllerBase
     [HttpGet("{orderId}")]
     public async Task<IActionResult> GetById(int orderId)
     {
-
-
         if (orderId <= 0)
             return BadRequest(new { message = "orderId must be greater than 0." });
 
@@ -81,7 +79,6 @@ public class LabOrderController : ControllerBase
     [HttpDelete("{orderId}")]
     public async Task<IActionResult> Delete(int orderId)
     {
-
         if (orderId <= 0)
             return BadRequest(new { message = "orderId must be greater than 0." });
 
