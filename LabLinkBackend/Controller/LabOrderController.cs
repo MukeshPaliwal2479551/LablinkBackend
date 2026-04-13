@@ -32,10 +32,10 @@ public class LabOrderController : ControllerBase
         });
     }
 
-   [HttpGet("list")]
+    [HttpGet("list")]
     public async Task<IActionResult> GetLabOrders(
-        [FromQuery] int? patientId,
-        [FromQuery] DateTime? orderDate)
+         [FromQuery] int? patientId,
+         [FromQuery] DateTime? orderDate)
     {
         var result = await _service.GetAsync(patientId, orderDate);
 
@@ -49,6 +49,11 @@ public class LabOrderController : ControllerBase
     [HttpGet("{orderId}")]
     public async Task<IActionResult> GetById(int orderId)
     {
+
+
+        if (orderId <= 0)
+            return BadRequest(new { message = "orderId must be greater than 0." });
+
         var result = await _service.GetByIdAsync(orderId);
 
         return Ok(new
@@ -76,6 +81,10 @@ public class LabOrderController : ControllerBase
     [HttpDelete("{orderId}")]
     public async Task<IActionResult> Delete(int orderId)
     {
+
+        if (orderId <= 0)
+            return BadRequest(new { message = "orderId must be greater than 0." });
+
         await _service.DeleteAsync(orderId);
 
         return Ok(new
