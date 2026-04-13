@@ -30,23 +30,7 @@ public class LabOrderRepository : ILabOrderRepository
             .FirstOrDefaultAsync(o => o.OrderId == orderId && o.IsActive);
     }
 
-    public async Task<List<LabOrder>> GetAllAsync()
-    {
-        return await _context.LabOrders
-            .Where(o => o.IsActive)
-            .OrderByDescending(o => o.OrderDate)
-            .ToListAsync();
-    }
-
-    public async Task DeleteAsync(LabOrder order)
-    {
-        _context.LabOrders.Update(order);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task<List<LabOrder>> SearchAsync(
-        int? patientId,
-        DateTime? orderDate)
+    public async Task<List<LabOrder>> GetAsync(int? patientId, DateTime? orderDate)
     {
         var query = _context.LabOrders
             .Where(o => o.IsActive)
@@ -59,16 +43,20 @@ public class LabOrderRepository : ILabOrderRepository
 
         if (orderDate.HasValue)
         {
-            var start = orderDate.Value.Date;
-            var end = start.AddDays(1);
+            var date = orderDate.Value.Date;
 
             query = query.Where(o =>
-                o.OrderDate >= start &&
-                o.OrderDate < end);
+                o.OrderDate.HasValue &&
+                o.OrderDate.Value.Date == date);
         }
 
         return await query
             .OrderByDescending(o => o.OrderDate)
             .ToListAsync();
+    }
+    public async Task DeleteAsync(LabOrder order)
+    {
+        _context.LabOrders.Update(order);
+        await _context.SaveChangesAsync();
     }
 }

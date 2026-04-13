@@ -17,7 +17,7 @@ public class OrderItemController : ControllerBase
         _service = service;
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] OrderItemDto dto)
     {
         if (dto == null)
