@@ -13,29 +13,37 @@ using LabLinkBackend.Repositories;
 using FluentValidation.AspNetCore;
 using FluentValidation;
 using LabLinkBackend.Validation;
-using LabLinkBackend.Services;
-using LabLinkBackend.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
- 
+
 builder.Services.AddControllers();
- 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddFluentValidationAutoValidation();
+ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+ builder.Services.AddScoped<IRoleService, RoleService>();
+ builder.Services.AddScoped<IPanelRepository, PanelRepository>();
+ builder.Services.AddScoped<IPanelService, PanelService>();
+ builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+builder.Services.AddScoped<ILabOrderService, LabOrderService>();
+builder.Services.AddScoped<ILabOrderRepository, LabOrderRepository>();
+builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IOrderItemService, OrderItemService>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<IUserService,UserService>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<IPanelRepository, PanelRepository>();
-builder.Services.AddScoped<IPanelService, PanelService>();
-builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
-builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+builder.Services.AddScoped<IAppointmentItemService, AppointmentItemService>();
+builder.Services.AddScoped<IAppointmentItemRepository, AppointmentItemRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<ITestRepository, TestRepository>();
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
+ builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
+ 
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured");
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
  

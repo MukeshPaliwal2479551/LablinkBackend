@@ -90,5 +90,28 @@ public async Task<Panel?> CreatePanelWithTestsAsync(PanelDto dto, List<Test> tes
         await _context.SaveChangesAsync();
     }
 
+    public async Task<List<Panel>> GetAllPanelsAsync(string? panelName = null, string? panelCode = null)
+    {
+        var query = _context.Panels.AsNoTracking().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(panelName))
+        {
+            query = query.Where(p => p.PanelName.Contains(panelName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(panelCode))
+        {
+            query = query.Where(p => p.PanelCode.Contains(panelCode));
+        }
+
+        return await query.ToListAsync();
+    }
+
+    public async Task<bool> HasActiveOrderReferencesAsync(int panelId)
+    {
+        return await _context.OrderItems
+            .Include(oi => oi.Order)
+            .AnyAsync(oi => oi.PanelId == panelId && oi.IsActive && oi.Order.IsActive);
+    }
 }
 

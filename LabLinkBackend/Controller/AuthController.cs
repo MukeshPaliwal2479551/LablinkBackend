@@ -7,10 +7,12 @@ using System.Text;
 using LabLinkBackend.Models;
 using JsonWebToken.DTO;
  
-namespace LabLinkBackend.Controllers
+namespace LabLinkBackend.Controller
+
 {
     [ApiController]
     [Route("api/[controller]")]
+    
     public class LoginController : ControllerBase
     {
         private readonly LabLinkDbContext _context;
@@ -57,7 +59,7 @@ namespace LabLinkBackend.Controllers
                 roles = roleNames
             });
         }
- 
+
         private string GenerateJwtToken(User user, List<string> roleNames)
         {
             var claims = new List<Claim>
@@ -65,7 +67,7 @@ namespace LabLinkBackend.Controllers
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim("userId", user.UserId.ToString())
             };
- 
+
             foreach (var role in roleNames)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));

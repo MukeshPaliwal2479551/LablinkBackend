@@ -9,6 +9,7 @@ namespace LabLinkBackend.Controller;
 
 [ApiController]
 [Route("api/patients")]
+[Authorize(Roles = "Receptionist,Admin,Patient")]
 public class PatientController : ControllerBase
 {
     private readonly IPatientService _service;
