@@ -61,7 +61,7 @@ public class OrderItemController : ControllerBase
     }
 
     [HttpGet("{orderItemId}")]
-    public async Task<IActionResult> GetOrderItems(int orderItemId)
+    public async Task<IActionResult> GetItem(int orderItemId)
     {
         var result = await _service.GetByIdAsync(orderItemId);
 
