@@ -7,7 +7,7 @@ namespace LabLinkBackend.Controller;
 
 [ApiController]
 [Route("api/instruments")]
-[Authorize]
+[Authorize(Roles = "Admin, Lab Technologist")]
 public class InstrumentRefController : ControllerBase
 {
     private readonly IInstrumentRefService _service;

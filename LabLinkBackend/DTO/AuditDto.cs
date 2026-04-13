@@ -4,7 +4,6 @@ namespace LabLinkBackend.DTO;
 
 public class AuditDto
 {
-    [Required]
     public int UserId { get; set; }
     
     [Required, MaxLength(100)]

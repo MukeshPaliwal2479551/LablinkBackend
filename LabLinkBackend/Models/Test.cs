@@ -12,7 +12,7 @@ public partial class Test
     public string Name { get; set; } = null!;
 
     public int? DepartmentId { get; set; }
-
+ 
     public int? MethodId { get; set; }
 
     public int? SpecimenTypeId { get; set; }

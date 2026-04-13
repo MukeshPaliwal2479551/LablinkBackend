@@ -8,11 +8,13 @@ public partial class LabLinkDbContext : DbContext
 {
     public LabLinkDbContext()
     {
+        
     }
 
     public LabLinkDbContext(DbContextOptions<LabLinkDbContext> options)
         : base(options)
     {
+        
     }
     public virtual DbSet<Accession> Accessions { get; set; }
 
@@ -499,6 +501,8 @@ public partial class LabLinkDbContext : DbContext
                 .IsFixedLength();
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.PrimaryPhysicianName)
+                .HasMaxLength(100);
 
             entity.HasOne(d => d.User).WithOne(p => p.PatientUser)
                 .HasForeignKey<Patient>(d => d.UserId)
