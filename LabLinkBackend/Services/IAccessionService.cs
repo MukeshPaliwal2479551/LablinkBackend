@@ -10,6 +10,7 @@ public interface IAccessionService
     Task<AccessionDto?> CreateAsync(int orderId, string? section);
     Task<AccessionDto?> GetByIdAsync(int accessionId);
     Task<AccessionDto?> GetByOrderIdAsync(int orderId);
+    Task<List<AccessionDto>> GetAllAsync();
     Task<AccessionDto?> UpdateSectionAsync(int accessionId, string? section);
     Task<bool> CancelAsync(int accessionId);
 }

@@ -40,6 +40,8 @@ builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IAccessionRepository,AccessionRepository>();
 builder.Services.AddScoped<IAccessionService,AccessionService>();
+builder.Services.AddScoped<IInstrumentRefRepository, InstrumentRefRepository>();
+builder.Services.AddScoped<IInstrumentRefService, InstrumentRefService>();
 builder.Services.AddScoped<IResultEntryRepository, ResultEntryRepository>();
 builder.Services.AddScoped<IResultEntryService, ResultEntryService>();
 builder.Services.AddHttpContextAccessor();

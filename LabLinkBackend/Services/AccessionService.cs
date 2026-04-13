@@ -2,6 +2,7 @@ using System;
 using LabLinkBackend.DTO;
 using LabLinkBackend.Models;
 using LabLinkBackend.Repositories;
+using Microsoft.AspNetCore.Http;
 
 namespace LabLinkBackend.Services;
 
@@ -9,13 +10,19 @@ public class AccessionService : IAccessionService
 {
     private readonly IAccessionRepository _accessionRepo;
     private readonly ILabOrderRepository _orderRepo;
+    private readonly IAuditLogService _auditLogService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public AccessionService(
         IAccessionRepository accessionRepo,
-        ILabOrderRepository orderRepo)
+        ILabOrderRepository orderRepo,
+        IAuditLogService auditLogService,
+        IHttpContextAccessor httpContextAccessor)
     {
         _accessionRepo = accessionRepo;
         _orderRepo = orderRepo;
+        _auditLogService = auditLogService;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<AccessionDto?> CreateAsync(int orderId, string? section)
@@ -41,6 +48,15 @@ public class AccessionService : IAccessionService
             };
 
             await _accessionRepo.AddAsync(accession);
+
+            await _auditLogService.CreateLogAsync(new AuditDto
+            {
+                UserId = GetCurrentUserId(),
+                Action = "CREATE",
+                Resource = "Accession",
+                Metadata = $"AccessionId={accession.AccessionId}, OrderId={orderId}"
+            });
+
             return Map(accession);
         }
         catch (Exception ex)
@@ -77,7 +93,13 @@ public class AccessionService : IAccessionService
                 $"Failed to retrieve accession for OrderId={orderId}.", ex);
         }
     }
-    
+
+    public async Task<List<AccessionDto>> GetAllAsync()
+    {
+        var accessions = await _accessionRepo.GetAllAsync();
+        return accessions.Select(Map).ToList();
+    }
+
     public async Task<AccessionDto?> UpdateSectionAsync(int accessionId, string? section)
     {
         try
@@ -88,6 +110,14 @@ public class AccessionService : IAccessionService
 
             accession.Section = section;
             await _accessionRepo.UpdateAsync(accession);
+
+            await _auditLogService.CreateLogAsync(new AuditDto
+            {
+                UserId = GetCurrentUserId(),
+                Action = "UPDATE",
+                Resource = "Accession",
+                Metadata = $"AccessionId={accessionId}, Section={section}"
+            });
 
             return Map(accession);
         }
@@ -108,6 +138,14 @@ public class AccessionService : IAccessionService
 
             accession.IsActive = false;
             await _accessionRepo.UpdateAsync(accession);
+
+            await _auditLogService.CreateLogAsync(new AuditDto
+            {
+                UserId = GetCurrentUserId(),
+                Action = "CANCEL",
+                Resource = "Accession",
+                Metadata = $"AccessionId={accessionId}"
+            });
 
             return true;
         }
@@ -133,5 +171,15 @@ public class AccessionService : IAccessionService
     {
         return $"ACC-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid():N}"
             .Substring(0, 20);
+    }
+
+    private int GetCurrentUserId()
+    {
+        var claimValue = _httpContextAccessor.HttpContext?
+            .User?
+            .FindFirst("userId")?
+            .Value;
+
+        return int.TryParse(claimValue, out var userId) ? userId : 0;
     }
 }

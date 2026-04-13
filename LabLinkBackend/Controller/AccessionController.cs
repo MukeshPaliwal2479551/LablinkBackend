@@ -68,6 +68,24 @@ public class AccessionController : ControllerBase
         });
     }
 
+
+    [HttpGet("list")]
+    public async Task<IActionResult> GetAll()
+    {
+        var result = await _service.GetAllAsync();
+
+
+        if (result == null)
+            return NotFound(new
+            {
+                message = "No accessions found."
+            });
+
+
+        return Ok(new { message = "Accessions retrieved successfully", data = result });
+    }
+
+
     [HttpPut("{accessionId}/section")]
     public async Task<IActionResult> UpdateSection(
      int accessionId,

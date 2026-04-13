@@ -28,6 +28,16 @@ public class AccessionRepository : IAccessionRepository
             .FirstOrDefaultAsync(a => a.OrderId == orderId && a.IsActive);
     }
 
+
+    public async Task<List<Accession>> GetAllAsync()
+    {
+        return await _context.Accessions
+            .Where(a => a.IsActive)
+            .OrderByDescending(a => a.AccessionDate)
+            .ToListAsync();
+    }
+
+
     public async Task<bool> ExistsForOrderAsync(int orderId)
     {
         return await _context.Accessions
