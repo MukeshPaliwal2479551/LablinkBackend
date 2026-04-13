@@ -7,7 +7,8 @@ using System.Text;
 using LabLinkBackend.Models;
 using JsonWebToken.DTO;
  
-namespace LabLinkBackend.Controllers
+namespace LabLinkBackend.Controller
+
 {
     [ApiController]
     [Route("api/[controller]")]

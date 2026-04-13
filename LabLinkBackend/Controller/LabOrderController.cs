@@ -17,19 +17,13 @@ public class LabOrderController : ControllerBase
         _service = service;
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] LabOrderDto dto)
     {
         if (dto == null)
             return BadRequest(new { message = "Request body cannot be null." });
 
         var result = await _service.CreateAsync(dto);
-
-        if (result == null)
-            return StatusCode(500, new
-            {
-                message = "Lab order could not be created."
-            });
 
         return Ok(new
         {
@@ -38,10 +32,12 @@ public class LabOrderController : ControllerBase
         });
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
+    [HttpGet("list")]
+    public async Task<IActionResult> GetLabOrders(
+         [FromQuery] int? patientId,
+         [FromQuery] DateTime? orderDate)
     {
-        var result = await _service.GetAllAsync();
+        var result = await _service.GetAsync(patientId, orderDate);
 
         return Ok(new
         {
@@ -50,17 +46,17 @@ public class LabOrderController : ControllerBase
         });
     }
 
-    [HttpPost("search")]
-    public async Task<IActionResult> Search([FromBody] LabOrderDto dto)
+    [HttpGet("{orderId}")]
+    public async Task<IActionResult> GetById(int orderId)
     {
-        if (dto == null)
-            return BadRequest(new { message = "Request body cannot be null." });
+        if (orderId <= 0)
+            return BadRequest(new { message = "orderId must be greater than 0." });
 
-        var result = await _service.SearchAsync(dto.PatientId, dto.OrderDate);
+        var result = await _service.GetByIdAsync(orderId);
 
         return Ok(new
         {
-            message = "Lab orders retrieved successfully",
+            message = "Lab order retrieved successfully",
             data = result
         });
     }
@@ -73,12 +69,6 @@ public class LabOrderController : ControllerBase
 
         var result = await _service.UpdateAsync(orderId, dto);
 
-        if (result == null)
-            return NotFound(new
-            {
-                message = $"Lab order with id {orderId} was not found."
-            });
-
         return Ok(new
         {
             message = "Lab order updated successfully",
@@ -86,27 +76,12 @@ public class LabOrderController : ControllerBase
         });
     }
 
-    [HttpGet("{orderId}")]
-    public async Task<IActionResult> Get(int orderId)
-    {
-        var result = await _service.GetByIdAsync(orderId);
-
-        if (result == null)
-            return NotFound(new
-            {
-                message = $"Lab order with id {orderId} was not found."
-            });
-
-        return Ok(new
-        {
-            message = "Lab order retrieved successfully",
-            data = result
-        });
-    }
-
     [HttpDelete("{orderId}")]
     public async Task<IActionResult> Delete(int orderId)
     {
+        if (orderId <= 0)
+            return BadRequest(new { message = "orderId must be greater than 0." });
+
         await _service.DeleteAsync(orderId);
 
         return Ok(new

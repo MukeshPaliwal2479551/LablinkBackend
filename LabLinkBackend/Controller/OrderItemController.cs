@@ -17,7 +17,7 @@ public class OrderItemController : ControllerBase
         _service = service;
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] OrderItemDto dto)
     {
         if (dto == null)
@@ -61,8 +61,12 @@ public class OrderItemController : ControllerBase
     }
 
     [HttpGet("{orderItemId}")]
-    public async Task<IActionResult> Get(int orderItemId)
+    public async Task<IActionResult> GetItem(int orderItemId)
     {
+
+        if (orderItemId <= 0)
+            return BadRequest(new { message = "orderItemId must be greater than 0." });
+
         var result = await _service.GetByIdAsync(orderItemId);
 
         if (result == null)
@@ -81,6 +85,10 @@ public class OrderItemController : ControllerBase
     [HttpGet("order/{orderId}")]
     public async Task<IActionResult> GetByOrder(int orderId)
     {
+
+        if (orderId <= 0)
+            return BadRequest(new { message = "orderId must be greater than 0." });
+
         var result = await _service.GetByOrderIdAsync(orderId);
 
         return Ok(new

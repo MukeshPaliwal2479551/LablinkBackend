@@ -20,11 +20,11 @@ builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddFluentValidationAutoValidation();
- builder.Services.AddScoped<IRoleRepository, RoleRepository>();
- builder.Services.AddScoped<IRoleService, RoleService>();
- builder.Services.AddScoped<IPanelRepository, PanelRepository>();
- builder.Services.AddScoped<IPanelService, PanelService>();
- builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IPanelRepository, PanelRepository>();
+builder.Services.AddScoped<IPanelService, PanelService>();
+builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 builder.Services.AddScoped<ILabOrderService, LabOrderService>();
 builder.Services.AddScoped<ILabOrderRepository, LabOrderRepository>();
@@ -40,9 +40,9 @@ builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IAccessionRepository,AccessionRepository>();
 builder.Services.AddScoped<IAccessionService,AccessionService>();
-
-
-
+builder.Services.AddScoped<IResultEntryRepository, ResultEntryRepository>();
+builder.Services.AddScoped<IResultEntryService, ResultEntryService>();
+builder.Services.AddHttpContextAccessor();
 
  builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
  

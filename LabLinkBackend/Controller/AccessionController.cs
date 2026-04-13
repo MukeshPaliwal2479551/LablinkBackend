@@ -50,21 +50,6 @@ public class AccessionController : ControllerBase
     }
 
 
-    [HttpGet("{accessionId}")]
-    public async Task<IActionResult> Get(int accessionId)
-    {
-        var result = await _service.GetByIdAsync(accessionId);
-
-        if (result == null)
-            return NotFound(new { message = "Accession not found." });
-
-        return Ok(new
-        {
-            message = "Accession retrieved successfully",
-            data = result
-        });
-    }
-
     [HttpGet("order/{orderId}")]
     public async Task<IActionResult> GetByOrder(int orderId)
     {

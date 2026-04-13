@@ -31,7 +31,7 @@ public class LabOrderService : ILabOrderService
                 ClientId = dto.ClientId,
                 Priority = dto.Priority,
                 OrderDate = DateTime.UtcNow,
-                IsActive = dto.IsActive
+                IsActive = true
             };
 
             await _repository.AddAsync(order);
@@ -83,20 +83,6 @@ public class LabOrderService : ILabOrderService
         }
     }
 
-    public async Task<List<LabOrderDto>> GetAllAsync()
-    {
-        try
-        {
-            var orders = await _repository.GetAllAsync();
-            return orders.Select(Map).ToList();
-        }
-        catch (Exception ex)
-        {
-            throw new ApplicationException(
-                "An error occurred while retrieving LabOrders.", ex);
-        }
-    }
-
     public async Task<LabOrderDto> GetByIdAsync(int orderId)
     {
         try
@@ -113,19 +99,19 @@ public class LabOrderService : ILabOrderService
         }
     }
 
-    public async Task<List<LabOrderDto>> SearchAsync(
-        int? patientId,
-        DateTime? orderDate)
+    public async Task<List<LabOrderDto>> GetAsync(
+        int? patientId = null,
+        DateTime? orderDate = null)
     {
         try
         {
-            var orders = await _repository.SearchAsync(patientId, orderDate);
+            var orders = await _repository.GetAsync(patientId, orderDate);
             return orders.Select(Map).ToList();
         }
         catch (Exception ex)
         {
             throw new ApplicationException(
-                "An error occurred while searching LabOrders.", ex);
+                "An error occurred while retrieving LabOrders.", ex);
         }
     }
 
@@ -137,7 +123,7 @@ public class LabOrderService : ILabOrderService
                 ?? throw new InvalidOperationException("LabOrder not found.");
 
             order.IsActive = false;
-            await _repository.DeleteAsync(order);
+            await _repository.UpdateAsync(order);
 
             await _auditLogService.CreateLogAsync(new AuditDto
             {
@@ -153,6 +139,7 @@ public class LabOrderService : ILabOrderService
                 $"An error occurred while deleting LabOrder (OrderId={orderId}).", ex);
         }
     }
+
     private static LabOrderDto Map(LabOrder order) =>
         new()
         {
