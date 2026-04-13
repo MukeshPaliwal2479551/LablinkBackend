@@ -38,9 +38,9 @@ builder.Services.AddScoped<IAppointmentItemService, AppointmentItemService>();
 builder.Services.AddScoped<IAppointmentItemRepository, AppointmentItemRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
-
-
-
+builder.Services.AddScoped<IResultEntryRepository, ResultEntryRepository>();
+builder.Services.AddScoped<IResultEntryService, ResultEntryService>();
+builder.Services.AddHttpContextAccessor();
 
  builder.Services.AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
  
