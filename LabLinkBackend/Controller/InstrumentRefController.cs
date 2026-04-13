@@ -17,7 +17,7 @@ public class InstrumentRefController : ControllerBase
         _service = service;
     }
 
-    [HttpGet]
+    [HttpGet("get")]
     public async Task<IActionResult> Get([FromQuery] int? instrumentId, [FromQuery] string? name, [FromQuery] string? section)
     {
         if (instrumentId.HasValue)
@@ -36,19 +36,19 @@ public class InstrumentRefController : ControllerBase
         }
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] InstrumentRefDto dto)
     {
         var result = await _service.UpsertAsync(dto);
         if (!result.Success)
             return BadRequest(new { error = result.Error });
 
-       var message = "Instrument created successfully.";
+        var message = "Instrument created successfully.";
 
         return Ok(new { message, data = result.Data });
     }
 
-    [HttpPut("{instrumentId}")]
+    [HttpPut("update/{instrumentId}")]
     public async Task<IActionResult> UpdateDetails(int instrumentId, [FromBody] InstrumentRefDto dto)
     {
         var result = await _service.UpdateDetailsAsync(instrumentId, dto);
@@ -58,7 +58,7 @@ public class InstrumentRefController : ControllerBase
         return Ok(new { message = "Instrument updated successfully.", data = result.Data });
     }
 
-    [HttpDelete("{instrumentId}")]
+    [HttpDelete("delete/{instrumentId}")]
     public async Task<IActionResult> Delete(int instrumentId)
     {
         var result = await _service.DeleteAsync(instrumentId);
