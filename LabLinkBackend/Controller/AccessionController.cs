@@ -18,7 +18,7 @@ public class AccessionController : ControllerBase
         _service = service;
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> Create(
     [FromBody] AccessionDto dto,
     [FromServices] IValidator<AccessionDto> validator)
