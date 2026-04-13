@@ -32,10 +32,10 @@ public class LabOrderController : ControllerBase
         });
     }
 
-    [HttpGet("list")]
-    public async Task<IActionResult> Get(
-         [FromQuery] int? patientId,
-         [FromQuery] DateTime? orderDate)
+   [HttpGet("list")]
+    public async Task<IActionResult> GetLabOrders(
+        [FromQuery] int? patientId,
+        [FromQuery] DateTime? orderDate)
     {
         var result = await _service.GetAsync(patientId, orderDate);
 
